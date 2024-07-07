@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->string('code', 10);
+            $table->string('code', 10)->unique();
             $table->string('name', 50);
             $table->enum('type', ['income', 'spending']);
             $table->bigInteger('created_at');

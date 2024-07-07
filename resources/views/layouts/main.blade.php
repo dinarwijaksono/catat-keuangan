@@ -56,6 +56,10 @@
                     <a href="/">
                         <li>Dashboard</li>
                     </a>
+
+                    <a href="/category">
+                        <li>Kategori</li>
+                    </a>
                 </ul>
 
             </aside>
