@@ -3,6 +3,8 @@
 @section('main-section')
     <section class="content">
 
+        @livewire('component.alert-success')
+
         <section class="box">
             <div class="box-header mb-4">
                 <h3 class="title">List Kategori</h3>

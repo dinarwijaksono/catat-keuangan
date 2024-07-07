@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Category;
 
+use App\Livewire\Component\AlertSuccess;
 use App\Services\CategoryService;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
@@ -42,11 +43,16 @@ class FormCreateCategory extends Component
     {
         $this->validate();
 
+        $this->dispatch('alert-hide')->to(AlertSuccess::class);
+
         try {
+
             $this->categoryService->create(auth()->user()->id, $this->categoryName, $this->type);
 
             $this->categoryName = '';
             $this->type = '';
+
+            $this->dispatch('alert-show', message: "Kategori berhasil disimpan.")->to(AlertSuccess::class);
 
             Log::info('do create category success');
         } catch (\Throwable $th) {

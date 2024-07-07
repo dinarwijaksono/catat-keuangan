@@ -3,6 +3,7 @@
 namespace Tests\Feature\Livewire\Category;
 
 use App\Livewire\Category\FormCreateCategory;
+use App\Livewire\Component\AlertSuccess;
 use App\Models\User;
 use Database\Seeders\UserRegisterSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -51,7 +52,9 @@ class FormCreateCategoryTest extends TestCase
         Livewire::test(FormCreateCategory::class)
             ->set('categoryName', $categoryName)
             ->set('type', 'income')
-            ->call('doCreateCategory');
+            ->call('doCreateCategory')
+            ->assertDispatchedTo(AlertSuccess::class, 'alert-hide')
+            ->assertDispatchedTo(AlertSuccess::class, 'alert-show');
 
         $this->assertDatabaseHas('categories', [
             'user_id' => $this->user->id,
