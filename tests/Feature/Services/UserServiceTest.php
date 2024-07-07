@@ -36,4 +36,28 @@ class UserServiceTest extends TestCase
             'date' => 10
         ]);
     }
+
+    public function test_get_start_date()
+    {
+        $this->userService->setStartDate($this->user->id, 10);
+
+        $startDate = $this->userService->getStartDate($this->user->id);
+
+        $this->assertIsObject($startDate);
+
+        $this->assertEquals($startDate->date, 10);
+    }
+
+    public function test_update_start_date()
+    {
+        $this->userService->setStartDate($this->user->id, 10);
+        $this->userService->getStartDate($this->user->id);
+
+        $this->userService->updateStartDate($this->user->id, 16);
+
+        $this->assertDatabaseHas('start_dates', [
+            'user_id' => $this->user->id,
+            'date' => 16
+        ]);
+    }
 }

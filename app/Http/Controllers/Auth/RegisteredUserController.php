@@ -49,11 +49,15 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $this->userService->setStartDate($user->id, 1);
-
         event(new Registered($user));
 
         Auth::login($user);
+
+        $user = User::select('id')
+            ->where('email', $request->email)
+            ->first();
+
+        $this->userService->setStartDate($user->id, 1);
 
         return redirect(route('dashboard', absolute: false));
     }
