@@ -11,6 +11,7 @@ Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 
 
 // CategoryController
 Route::get('/category', [CategoryController::class, 'index'])->middleware('auth');
+Route::get("/edit-category/{code}", [CategoryController::class, 'edit'])->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

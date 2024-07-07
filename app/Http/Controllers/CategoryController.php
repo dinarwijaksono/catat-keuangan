@@ -10,4 +10,11 @@ class CategoryController extends Controller
     {
         return view('category.index');
     }
+
+    public function edit(string $code)
+    {
+        $data['categoryCode'] = $code;
+
+        return view('category.edit', $data);
+    }
 }

@@ -41,6 +41,25 @@ class CategoryService
     }
 
     // read
+    public function getByCode(string $categoryCode): object
+    {
+        self::boot();
+
+        try {
+            $category = Category::select('id', 'user_id', 'code', 'name', 'type', 'created_at', 'updated_at')
+                ->where('code', $categoryCode)
+                ->first();
+
+            Log::info('Get category by code success');
+
+            return $category;
+        } catch (\Throwable $th) {
+            Log::error('Get category by code failed', [
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
     public function getAll(int $userId): Collection
     {
         self::boot();
@@ -60,6 +79,26 @@ class CategoryService
             ]);
 
             return collect([]);
+        }
+    }
+
+    // update
+    public function update(string $categoryCode, string $categoryName): void
+    {
+        self::boot();
+
+        try {
+            Category::where('code', $categoryCode)
+                ->update([
+                    'name' => strtolower(trim($categoryName)),
+                    'updated_at' => round(microtime(true) * 1000),
+                ]);
+
+            Log::info('Update category success');
+        } catch (\Throwable $th) {
+            Log::error('Update category failed', [
+                'message' => $th->getMessage()
+            ]);
         }
     }
 }

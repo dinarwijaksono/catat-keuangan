@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Services;
 
+use App\Models\Category;
 use App\Models\User;
 use App\Services\CategoryService;
 use Database\Seeders\CategorySeeder;
@@ -42,6 +43,19 @@ class CategoryServiceTest extends TestCase
     }
 
 
+    public function test_get_by_code()
+    {
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+
+        $category = Category::select('*')->first();
+
+        $response = $this->categoryService->getByCode($category->code);
+
+        $this->assertEquals($category->name, $response->name);
+        $this->assertEquals($category->type, $response->type);
+    }
+
     public function test_get_all()
     {
         $this->seed(CategorySeeder::class);
@@ -52,5 +66,22 @@ class CategoryServiceTest extends TestCase
 
         $this->assertIsObject($response);
         $this->assertEquals($response->count(), 3);
+    }
+
+
+    public function test_update()
+    {
+        $this->seed(CategorySeeder::class);
+
+        $category = Category::select('*')->first();
+        $name = 'example new name';
+
+        $this->categoryService->update($category->code, $name);
+
+        $this->assertDatabaseHas('categories', [
+            'user_id' => $this->user->id,
+            'code' => $category->code,
+            'name' => $name
+        ]);
     }
 }
