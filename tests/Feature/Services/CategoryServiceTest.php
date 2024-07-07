@@ -4,6 +4,7 @@ namespace Tests\Feature\Services;
 
 use App\Models\User;
 use App\Services\CategoryService;
+use Database\Seeders\CategorySeeder;
 use Database\Seeders\UserRegisterSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -38,5 +39,18 @@ class CategoryServiceTest extends TestCase
             'name' => $name,
             'type' => $type
         ]);
+    }
+
+
+    public function test_get_all()
+    {
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+
+        $response = $this->categoryService->getAll($this->user->id);
+
+        $this->assertIsObject($response);
+        $this->assertEquals($response->count(), 3);
     }
 }

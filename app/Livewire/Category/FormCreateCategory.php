@@ -53,6 +53,7 @@ class FormCreateCategory extends Component
             $this->type = '';
 
             $this->dispatch('alert-show', message: "Kategori berhasil disimpan.")->to(AlertSuccess::class);
+            $this->dispatch('create-category')->to(BoxCategory::class);
 
             Log::info('do create category success');
         } catch (\Throwable $th) {

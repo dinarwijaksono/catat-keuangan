@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Livewire\Category;
 
+use App\Livewire\Category\BoxCategory;
 use App\Livewire\Category\FormCreateCategory;
 use App\Livewire\Component\AlertSuccess;
 use App\Models\User;
@@ -54,6 +55,7 @@ class FormCreateCategoryTest extends TestCase
             ->set('type', 'income')
             ->call('doCreateCategory')
             ->assertDispatchedTo(AlertSuccess::class, 'alert-hide')
+            ->assertDispatchedTo(BoxCategory::class, 'create-category')
             ->assertDispatchedTo(AlertSuccess::class, 'alert-show');
 
         $this->assertDatabaseHas('categories', [

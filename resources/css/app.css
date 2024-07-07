@@ -115,7 +115,10 @@
         @apply border border-slate-300 border-separate
     }
 
-    table.table-simple tr th, table.table-separate tr td {
+    table.table-simple tr th,
+    table.table-separate tr th,
+    table.table-simple tr td,
+    table.table-separate tr td {
         @apply px-2 py-1 border border-slate-300
     }
 
