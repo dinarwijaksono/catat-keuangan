@@ -101,4 +101,20 @@ class CategoryService
             ]);
         }
     }
+
+
+    // delete
+    public function delete(string $categoryCode): void
+    {
+        self::boot();
+
+        try {
+            Category::where('code', $categoryCode)
+                ->delete();
+
+            Log::info('delete category success');
+        } catch (\Throwable $th) {
+            Log::error('delete category failed');
+        }
+    }
 }

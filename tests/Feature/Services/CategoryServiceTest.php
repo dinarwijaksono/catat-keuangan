@@ -84,4 +84,18 @@ class CategoryServiceTest extends TestCase
             'name' => $name
         ]);
     }
+
+    public function test_delete()
+    {
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+
+        $category = Category::select('*')->first();
+
+        $this->categoryService->delete($category->code);
+
+        $this->assertDatabaseMissing('categories', [
+            'code' => $category->code
+        ]);
+    }
 }

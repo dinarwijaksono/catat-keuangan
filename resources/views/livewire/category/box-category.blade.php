@@ -35,8 +35,17 @@
                         <td class="p-1 w-2/12 text-center">{{ date('H:i - j F Y', $key->created_at / 1000) }}</td>
                         <td class="p-1 w-2/12 text-center">{{ date('H:i - j F Y', $key->updated_at / 1000) }}</td>
                         <td class="p-1 w-2/12">
-                            <x-zara.link-button-success
-                                href="/edit-category/{{ $key->code }}">Edit</x-zara.link-button-success>
+                            <div class="flex gap-2">
+                                <div class="basis-6/12">
+                                    <x-zara.link-button-success
+                                        href="/edit-category/{{ $key->code }}">Edit</x-zara.link-button-success>
+                                </div>
+
+                                <div class="basis-6/12">
+                                    <x-zara.button-danger
+                                        wire:click="doDelete('{{ $key->code }}')">Hapus</x-zara.button-danger>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 @endforeach
