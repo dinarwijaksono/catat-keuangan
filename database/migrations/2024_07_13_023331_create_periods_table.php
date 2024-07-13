@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->bigInteger('period_date');
+            $table->string('period_name');
             $table->boolean('is_close');
             $table->bigInteger('created_at');
             $table->bigInteger('updated_at');

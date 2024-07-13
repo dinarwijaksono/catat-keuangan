@@ -66,7 +66,7 @@ class CategoryService
 
         try {
 
-            $category = Category::select('user_id', 'code', 'name', 'type', 'created_at', 'updated_at')
+            $category = Category::select('id', 'user_id', 'code', 'name', 'type', 'created_at', 'updated_at')
                 ->where('user_id', $userId)
                 ->get();
 

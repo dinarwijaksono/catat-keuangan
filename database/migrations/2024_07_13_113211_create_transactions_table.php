@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('category_id');
             $table->foreignId('period_id');
-            $table->string('code', 10);
+            $table->string('code', 10)->unique();
             $table->bigInteger('date');
             $table->string('description', 100);
             $table->integer('income');

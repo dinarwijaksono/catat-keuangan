@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 // HomeController
@@ -12,6 +13,9 @@ Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 
 // CategoryController
 Route::get('/category', [CategoryController::class, 'index'])->middleware('auth');
 Route::get("/edit-category/{code}", [CategoryController::class, 'edit'])->middleware('auth');
+
+// TransactionController
+Route::get('/create-transaction', [TransactionController::class, 'create'])->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
