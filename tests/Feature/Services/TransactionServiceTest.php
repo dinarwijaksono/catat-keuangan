@@ -4,10 +4,12 @@ namespace Tests\Feature\Services;
 
 use App\Domains\TransactionDomain;
 use App\Models\Category;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Services\PeriodService;
 use App\Services\TransactionService;
 use Database\Seeders\CategorySeeder;
+use Database\Seeders\TransactionSeeder;
 use Database\Seeders\UserRegisterSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -59,5 +61,30 @@ class TransactionServiceTest extends TestCase
             'income' => 0,
             'spending' => 20000
         ]);
+    }
+
+    public function test_get_by_date()
+    {
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+
+        $transaction = Transaction::select('*')->first();
+
+        $response = $this->transactionService->getByDate($this->user, $transaction->date);
+
+        $response = $response->first();
+        $this->assertObjectHasProperty('code', $response);
+        $this->assertObjectHasProperty('period_date', $response);
+        $this->assertObjectHasProperty('period_name', $response);
+        $this->assertObjectHasProperty('category_code', $response);
+        $this->assertObjectHasProperty('category_name', $response);
+        $this->assertObjectHasProperty('category_type', $response);
+        $this->assertObjectHasProperty('date', $response);
+        $this->assertObjectHasProperty('description', $response);
+        $this->assertObjectHasProperty('income', $response);
+        $this->assertObjectHasProperty('spending', $response);
+        $this->assertObjectHasProperty('created_at', $response);
+        $this->assertObjectHasProperty('updated_at', $response);
     }
 }

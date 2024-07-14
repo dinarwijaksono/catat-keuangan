@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Domains\TransactionDomain;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class TransactionService
@@ -12,7 +14,6 @@ class TransactionService
     public function boot($user)
     {
         Log::withContext([
-            'class' => TransactionService::class,
             'user_id' => $user->id,
             'user_email' => $user->email,
         ]);
@@ -45,6 +46,50 @@ class TransactionService
             Log::info('create transaction success');
         } catch (\Throwable $th) {
             Log::error('create transaction failed', [
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+
+    // read
+    public function getByDate(User $user, $date): Collection
+    {
+        self::boot($user);
+
+        try {
+            $day = date('j', $date);
+            $month = date('n', $date);
+            $year = date('Y', $date);
+
+            $date = mktime(0, 0, 0, $month, $day, $year);
+
+            $transaction = DB::table('transactions')
+                ->join('periods', 'periods.id', '=', 'transactions.period_id')
+                ->join('categories', 'categories.id', '=', 'transactions.category_id')
+                ->select([
+                    'transactions.code',
+                    'periods.period_date',
+                    'periods.period_name',
+                    'categories.code as category_code',
+                    'categories.name as category_name',
+                    'categories.type as category_type',
+                    'transactions.date',
+                    'transactions.description',
+                    'transactions.income',
+                    'transactions.spending',
+                    'transactions.created_at',
+                    'transactions.updated_at'
+                ])
+                ->where('transactions.user_id', $user->id)
+                ->where('transactions.date', $date)
+                ->get();
+
+            Log::info('get transaction by date success');
+
+            return $transaction;
+        } catch (\Throwable $th) {
+            Log::error('get transaction by date failed', [
                 'message' => $th->getMessage()
             ]);
         }
