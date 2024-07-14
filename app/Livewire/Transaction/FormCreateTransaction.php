@@ -52,6 +52,11 @@ class FormCreateTransaction extends Component
 
         $this->listSelectCategory = $this->listCategory->where('type', 'spending');
 
+        if ($this->listSelectCategory->isEmpty()) {
+            $this->type = 'income';
+            $this->listSelectCategory = $this->listCategory->where('type', 'income');
+        }
+
         $this->category = $this->listSelectCategory->first()->id;
     }
 

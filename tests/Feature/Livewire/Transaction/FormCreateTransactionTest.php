@@ -29,6 +29,8 @@ class FormCreateTransactionTest extends TestCase
         $this->actingAs($this->user);
 
         $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
         $this->categoryService = $this->app->make(CategoryService::class);
         $this->category = Category::select('*')->first();
     }
@@ -49,13 +51,15 @@ class FormCreateTransactionTest extends TestCase
             ->set('description', 'makan malam')
             ->call('doCreateTransaction');
 
+        $category = Category::select('*')->first();
+
         $this->assertDatabaseHas('transactions', [
             'user_id' => $this->user->id,
             'date' => strtotime('2024-03-05'),
-            'category_id' => $this->category->id,
+            'category_id' => $category->id,
             'description' => 'makan malam',
-            'income' => $this->category->type == 'income' ? 10000 : 0,
-            'spending' => $this->category->type == 'spending' ? 10000 : 0,
+            'income' => $category->type == 'income' ? 10000 : 0,
+            'spending' => $category->type == 'spending' ? 10000 : 0,
         ]);
     }
 
