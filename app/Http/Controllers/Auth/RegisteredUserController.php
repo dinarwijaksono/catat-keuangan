@@ -57,7 +57,7 @@ class RegisteredUserController extends Controller
             ->where('email', $request->email)
             ->first();
 
-        $this->userService->setStartDate($user->id, 1);
+        $this->userService->setStartDate($user, 1);
 
         return redirect(route('dashboard', absolute: false));
     }

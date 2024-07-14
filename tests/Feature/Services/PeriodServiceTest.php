@@ -22,7 +22,6 @@ class PeriodServiceTest extends TestCase
 
         $this->seed(UserRegisterSeeder::class);
         $this->user = User::select('*')->first();
-        $this->actingAs($this->user);
 
         $this->periodService = $this->app->make(PeriodService::class);
     }
@@ -31,7 +30,7 @@ class PeriodServiceTest extends TestCase
     {
         $date = mktime(1, 2, 10, 1, 5, 2023);
 
-        $response = $this->periodService->createGetId($this->user->id, 1, 2023);
+        $response = $this->periodService->createGetId($this->user, 1, 2023);
 
         $this->assertTrue(is_int($response));
 
@@ -47,25 +46,25 @@ class PeriodServiceTest extends TestCase
 
     public function test_check_is_empty_return_true()
     {
-        $response = $this->periodService->checkIsEmpty($this->user->id, 1, 2024);
+        $response = $this->periodService->checkIsEmpty($this->user, 1, 2024);
 
         $this->assertTrue($response);
     }
 
     public function test_check_is_empty_return_false()
     {
-        $this->periodService->createGetId($this->user->id, 1, 2024);
+        $this->periodService->createGetId($this->user, 1, 2024);
 
-        $response = $this->periodService->checkIsEmpty($this->user->id, 1, 2024);
+        $response = $this->periodService->checkIsEmpty($this->user, 1, 2024);
 
         $this->assertFalse($response);
     }
 
     public function test_get_by_month_and_year()
     {
-        $this->periodService->createGetId($this->user->id, 1, 2024);
+        $this->periodService->createGetId($this->user, 1, 2024);
 
-        $response = $this->periodService->getByMonthYear($this->user->id, 1, 2024);
+        $response = $this->periodService->getByMonthYear($this->user, 1, 2024);
 
         $this->assertEquals($response->period_date, mktime(0, 0, 0, 1, 1, 2024));
         $this->assertEquals($response->period_name, date('F Y', mktime(0, 0, 0, 1, 1, 2024)));

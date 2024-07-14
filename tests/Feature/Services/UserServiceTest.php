@@ -20,16 +20,14 @@ class UserServiceTest extends TestCase
         parent::setUp();
 
         $this->seed(UserSeeder::class);
+        $this->user = User::select('*')->first();
 
         $this->userService = $this->app->make(UserService::class);
-
-        $this->user = User::select('*')->first();
-        $this->actingAs($this->user);
     }
 
     public function test_set_start_date(): void
     {
-        $this->userService->setStartDate($this->user->id, 10);
+        $this->userService->setStartDate($this->user, 10);
 
         $this->assertDatabaseHas('start_dates', [
             'user_id' => $this->user->id,
@@ -39,9 +37,9 @@ class UserServiceTest extends TestCase
 
     public function test_get_start_date()
     {
-        $this->userService->setStartDate($this->user->id, 10);
+        $this->userService->setStartDate($this->user, 10);
 
-        $startDate = $this->userService->getStartDate($this->user->id);
+        $startDate = $this->userService->getStartDate($this->user);
 
         $this->assertIsObject($startDate);
 
@@ -50,10 +48,10 @@ class UserServiceTest extends TestCase
 
     public function test_update_start_date()
     {
-        $this->userService->setStartDate($this->user->id, 10);
-        $this->userService->getStartDate($this->user->id);
+        $this->userService->setStartDate($this->user, 10);
+        $this->userService->getStartDate($this->user);
 
-        $this->userService->updateStartDate($this->user->id, 16);
+        $this->userService->updateStartDate($this->user, 16);
 
         $this->assertDatabaseHas('start_dates', [
             'user_id' => $this->user->id,

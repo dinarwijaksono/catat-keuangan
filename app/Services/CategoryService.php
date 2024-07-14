@@ -3,28 +3,29 @@
 namespace App\Services;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class CategoryService
 {
-    public function boot()
+    public function boot($user): void
     {
         Log::withContext([
             'class' => CategoryService::class,
-            'user_id' => auth()->user()->id,
-            'user_email' => auth()->user()->email,
+            'user_id' => $user->id,
+            'user_email' => $user->email,
         ]);
     }
 
     // create
-    public function create(int $userId, string $name, string $type): void
+    public function create(User $user, string $name, string $type): void
     {
-        self::boot();
+        self::boot($user);
 
         try {
             Category::insert([
-                'user_id' => $userId,
+                'user_id' => $user->id,
                 'code' => 'C' . random_int(1, 999999999),
                 'name' => strtolower($name),
                 'type' => $type,
@@ -41,9 +42,9 @@ class CategoryService
     }
 
     // read
-    public function getByCode(string $categoryCode): object
+    public function getByCode(User $user, string $categoryCode): object
     {
-        self::boot();
+        self::boot($user);
 
         try {
             $category = Category::select('id', 'user_id', 'code', 'name', 'type', 'created_at', 'updated_at')
@@ -60,14 +61,14 @@ class CategoryService
         }
     }
 
-    public function getAll(int $userId): Collection
+    public function getAll(User $user): Collection
     {
-        self::boot();
+        self::boot($user);
 
         try {
 
             $category = Category::select('id', 'user_id', 'code', 'name', 'type', 'created_at', 'updated_at')
-                ->where('user_id', $userId)
+                ->where('user_id', $user->id)
                 ->get();
 
             Log::info('get all category success');
@@ -83,9 +84,9 @@ class CategoryService
     }
 
     // update
-    public function update(string $categoryCode, string $categoryName): void
+    public function update(User $user, string $categoryCode, string $categoryName): void
     {
-        self::boot();
+        self::boot($user);
 
         try {
             Category::where('code', $categoryCode)
@@ -104,9 +105,9 @@ class CategoryService
 
 
     // delete
-    public function delete(string $categoryCode): void
+    public function delete(User $user, string $categoryCode): void
     {
-        self::boot();
+        self::boot($user);
 
         try {
             Category::where('code', $categoryCode)

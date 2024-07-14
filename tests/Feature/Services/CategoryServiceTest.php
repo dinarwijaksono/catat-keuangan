@@ -23,7 +23,6 @@ class CategoryServiceTest extends TestCase
 
         $this->seed(UserRegisterSeeder::class);
         $this->user = User::select('*')->first();
-        $this->actingAs($this->user);
 
         $this->categoryService = $this->app->make(CategoryService::class);
     }
@@ -33,7 +32,7 @@ class CategoryServiceTest extends TestCase
         $name = 'Example name';
         $type = 'spending';
 
-        $this->categoryService->create($this->user->id, $name, $type);
+        $this->categoryService->create($this->user, $name, $type);
 
         $this->assertDatabaseHas('categories', [
             'user_id' => $this->user->id,
@@ -50,7 +49,7 @@ class CategoryServiceTest extends TestCase
 
         $category = Category::select('*')->first();
 
-        $response = $this->categoryService->getByCode($category->code);
+        $response = $this->categoryService->getByCode($this->user, $category->code);
 
         $this->assertEquals($category->name, $response->name);
         $this->assertEquals($category->type, $response->type);
@@ -62,7 +61,7 @@ class CategoryServiceTest extends TestCase
         $this->seed(CategorySeeder::class);
         $this->seed(CategorySeeder::class);
 
-        $response = $this->categoryService->getAll($this->user->id);
+        $response = $this->categoryService->getAll($this->user);
 
         $this->assertIsObject($response);
         $this->assertEquals($response->count(), 3);
@@ -76,7 +75,7 @@ class CategoryServiceTest extends TestCase
         $category = Category::select('*')->first();
         $name = 'example new name';
 
-        $this->categoryService->update($category->code, $name);
+        $this->categoryService->update($this->user, $category->code, $name);
 
         $this->assertDatabaseHas('categories', [
             'user_id' => $this->user->id,
@@ -92,7 +91,7 @@ class CategoryServiceTest extends TestCase
 
         $category = Category::select('*')->first();
 
-        $this->categoryService->delete($category->code);
+        $this->categoryService->delete($this->user, $category->code);
 
         $this->assertDatabaseMissing('categories', [
             'code' => $category->code

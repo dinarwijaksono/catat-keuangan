@@ -34,14 +34,14 @@ class FormCreateTransaction extends Component
         Log::withContext([
             'class' => FormCreateTransaction::class,
             'user_id' => auth()->user()->id,
-            'user_name' => auth()->user()->name
+            'user_email' => auth()->user()->email
         ]);
 
         $this->categoryService = App::make(CategoryService::class);
         $this->periodService = App::make(PeriodService::class);
         $this->transactionService = App::make(TransactionService::class);
 
-        $this->listCategory = $this->categoryService->getAll(auth()->user()->id);
+        $this->listCategory = $this->categoryService->getAll(auth()->user());
     }
 
     public function mount()
@@ -98,17 +98,17 @@ class FormCreateTransaction extends Component
 
             $month = date('n', strtotime($this->date));
             $year = date('Y', strtotime($this->date));
-            $userId = auth()->user()->id;
+            $user = auth()->user();
 
-            if ($this->periodService->checkIsEmpty($userId, $month, $year)) {
-                $periodId = $this->periodService->createGetId($userId, $month, $year);
+            if ($this->periodService->checkIsEmpty($user, $month, $year)) {
+                $periodId = $this->periodService->createGetId($user, $month, $year);
             } else {
-                $period = $this->periodService->getByMonthYear($userId, $month, $year);
+                $period = $this->periodService->getByMonthYear($user, $month, $year);
                 $periodId = $period->id;
             }
 
             $transactionDomain = new TransactionDomain();
-            $transactionDomain->userId = $userId;
+            $transactionDomain->userId = $user->id;
             $transactionDomain->categoryId = $this->category;
             $transactionDomain->periodId = $periodId;
             $transactionDomain->date = strtotime($this->date);
@@ -116,7 +116,7 @@ class FormCreateTransaction extends Component
             $transactionDomain->income = $this->type == 'income' ? $this->total : 0;
             $transactionDomain->spending = $this->type == 'spending' ? $this->total : 0;
 
-            $this->transactionService->create($transactionDomain);
+            $this->transactionService->create($user, $transactionDomain);
 
             $this->date = date('Y-m-d');
             $this->type = 'spending';

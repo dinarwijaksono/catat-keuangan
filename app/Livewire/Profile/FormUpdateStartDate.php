@@ -24,7 +24,7 @@ class FormUpdateStartDate extends Component
 
         $this->userService = App::make(UserService::class);
 
-        $this->startDate = $this->userService->getStartDate(auth()->user()->id);
+        $this->startDate = $this->userService->getStartDate(auth()->user());
     }
 
     public function mount()
@@ -44,7 +44,7 @@ class FormUpdateStartDate extends Component
         $this->validate();
 
         try {
-            $this->userService->updateStartDate(auth()->user()->id, $this->date);
+            $this->userService->updateStartDate(auth()->user(), $this->date);
 
             Log::info('do update start date success');
 

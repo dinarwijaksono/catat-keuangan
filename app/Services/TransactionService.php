@@ -4,23 +4,24 @@ namespace App\Services;
 
 use App\Domains\TransactionDomain;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class TransactionService
 {
-    public function boot()
+    public function boot($user)
     {
         Log::withContext([
             'class' => TransactionService::class,
-            'user_id' => auth()->user()->id,
-            'user_email' => auth()->user()->email,
+            'user_id' => $user->id,
+            'user_email' => $user->email,
         ]);
     }
 
     // create
-    public function create(TransactionDomain $transactionDomain): void
+    public function create(User $user, TransactionDomain $transactionDomain): void
     {
-        self::boot();
+        self::boot($user);
 
         try {
 

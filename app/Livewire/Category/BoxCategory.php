@@ -17,14 +17,13 @@ class BoxCategory extends Component
     public function boot()
     {
         Log::withContext([
-            'class' => BoxCategory::class,
             'user_id' => auth()->user()->id,
-            'user_name' => auth()->user()->name,
+            'user_email' => auth()->user()->email,
         ]);
 
         $this->categoryService = App::make(CategoryService::class);
 
-        $this->categories = $this->categoryService->getAll(auth()->user()->id)->sortBy('name');
+        $this->categories = $this->categoryService->getAll(auth()->user())->sortBy('name');
     }
 
     public function getListeners()
@@ -38,7 +37,7 @@ class BoxCategory extends Component
     public function doDelete(string $code)
     {
         try {
-            $this->categoryService->delete($code);
+            $this->categoryService->delete(auth()->user(), $code);
 
             $this->dispatch('alert-show', "Kategori berhasil di hapus.")->to(AlertSuccess::class);
             $this->dispatch('delete-category')->self();

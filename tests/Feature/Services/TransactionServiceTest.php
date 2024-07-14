@@ -30,7 +30,6 @@ class TransactionServiceTest extends TestCase
 
         $this->seed(UserRegisterSeeder::class);
         $this->user = User::select('*')->first();
-        $this->actingAs($this->user);
 
         $this->seed(CategorySeeder::class);
         $this->category = Category::select('*')->first();
@@ -38,7 +37,7 @@ class TransactionServiceTest extends TestCase
 
     public function test_create(): void
     {
-        $periodId = $this->periodService->createGetId($this->user->id, 1, 2024);
+        $periodId = $this->periodService->createGetId($this->user, 1, 2024);
 
         $transactionDomain = new TransactionDomain();
         $transactionDomain->userId = $this->user->id;
@@ -49,7 +48,7 @@ class TransactionServiceTest extends TestCase
         $transactionDomain->income = 0;
         $transactionDomain->spending = 20000;
 
-        $this->transactionService->create($transactionDomain);
+        $this->transactionService->create($this->user, $transactionDomain);
 
         $this->assertDatabaseHas('transactions', [
             'user_id' => $this->user->id,

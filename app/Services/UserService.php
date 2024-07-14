@@ -3,28 +3,33 @@
 namespace App\Services;
 
 use App\Models\StartDate;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class UserService
 {
-    public function boot()
+    protected $user;
+
+    public function boot($user)
     {
+        $this->user = $user;
+
         Log::withContext([
             'class' => UserService::class,
-            'user_id' => auth()->user()->id,
-            'user_email' => auth()->user()->email,
+            'user_id' => $this->user->id,
+            'user_email' => $this->user->email,
         ]);
     }
 
     // create
-    public function setStartDate(int $userId, int $startDate): void
+    public function setStartDate(User $user, int $startDate): void
     {
-        self::boot();
+        self::boot($user);
 
         try {
 
             StartDate::insert([
-                'user_id' => $userId,
+                'user_id' => $user->id,
                 'date' => $startDate,
                 'created_at' => round(microtime(true) * 1000),
                 'updated_at' => round(microtime(true) * 1000),
@@ -39,13 +44,13 @@ class UserService
     }
 
     // read
-    public function getStartDate(int $userId): object
+    public function getStartDate(User $user): object
     {
-        self::boot();
+        self::boot($user);
 
         try {
             $startDate = StartDate::select('id', 'user_id', 'date', 'created_at', 'updated_at')
-                ->where('user_id', $userId)
+                ->where('user_id', $user->id)
                 ->first();
 
             Log::info("get start date success");
@@ -60,12 +65,12 @@ class UserService
 
 
     // update
-    public function updateStartDate(int $userId, int $date): void
+    public function updateStartDate(User $user, int $date): void
     {
-        self::boot();
+        self::boot($user);
 
         try {
-            StartDate::where('user_id', $userId)
+            StartDate::where('user_id', $user->id)
                 ->update([
                     'date'  => $date,
                     'updated_at' => round(microtime(true) * 1000)

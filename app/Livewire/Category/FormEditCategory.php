@@ -21,7 +21,7 @@ class FormEditCategory extends Component
     {
         $this->categoryService = App::make(CategoryService::class);
 
-        $this->category = $this->categoryService->getByCode($this->code);
+        $this->category = $this->categoryService->getByCode(auth()->user(), $this->code);
     }
 
     public function mount()
@@ -39,7 +39,7 @@ class FormEditCategory extends Component
         $this->validate();
 
         try {
-            $this->categoryService->update($this->code, $this->categoryName);
+            $this->categoryService->update(auth()->user(), $this->code, $this->categoryName);
 
             $this->dispatch('alert-show', 'Kategori berhasil di edit.')->to(AlertSuccess::class);
 

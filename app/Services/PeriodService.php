@@ -3,30 +3,35 @@
 namespace App\Services;
 
 use App\Models\Period;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PeriodService
 {
-    public function boot()
+    protected $user;
+
+    public function boot(User $user)
     {
+        $this->user = $user;
+
         Log::withContext([
             'class' => PeriodService::class,
-            'user_id'  => auth()->user()->id,
-            'user_email'  => auth()->user()->email,
+            'user_id'  => $this->user->id,
+            'user_email'  => $this->user->email,
         ]);
     }
 
     // create
-    public function createGetId(int $userId, int $month, int $year): int
+    public function createGetId(User $user, int $month, int $year): int
     {
-        self::boot();
+        self::boot($user);
 
         try {
             $date = mktime(0, 0, 0, $month, 1, $year);
 
             $id = DB::table('periods')->insertGetId([
-                'user_id' => $userId,
+                'user_id' => $user->id,
                 'period_date' => $date,
                 'period_name' => date('F Y', $date),
                 'is_close' => false,
@@ -45,13 +50,13 @@ class PeriodService
     }
 
     // read
-    public function checkIsEmpty(int $userId, int $month, int $year): bool
+    public function checkIsEmpty(User $user, int $month, int $year): bool
     {
-        self::boot();
+        self::boot($user);
 
         try {
             $period = Period::select('id')
-                ->where('user_id', $userId)
+                ->where('user_id', $user->id)
                 ->where('period_date', mktime(0, 0, 0, $month, 1, $year))
                 ->get();
 
@@ -65,9 +70,9 @@ class PeriodService
         }
     }
 
-    public function getByMonthYear(int $userId, int $month, int $year): object
+    public function getByMonthYear($user, int $month, int $year): object
     {
-        self::boot();
+        self::boot($user);
 
         try {
             $period = Period::select(
@@ -79,7 +84,7 @@ class PeriodService
                 'created_at',
                 'updated_at'
             )
-                ->where('user_id', $userId)
+                ->where('user_id', $user->id)
                 ->where('period_date', mktime(0, 0, 0, $month, 1, $year))
                 ->first();
 
