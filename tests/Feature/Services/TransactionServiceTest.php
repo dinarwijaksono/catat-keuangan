@@ -4,6 +4,7 @@ namespace Tests\Feature\Services;
 
 use App\Domains\TransactionDomain;
 use App\Models\Category;
+use App\Models\Period;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Services\PeriodService;
@@ -63,6 +64,20 @@ class TransactionServiceTest extends TestCase
         ]);
     }
 
+    public function test_get_by_code()
+    {
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+
+        $transaction = Transaction::select('*')->first();
+
+        $response = $this->transactionService->getByCode($this->user, $transaction->code);
+
+        $this->assertEquals($transaction->date, $response->date);
+        $this->assertEquals($transaction->description, $response->description);
+    }
+
     public function test_get_by_date()
     {
         $this->seed(TransactionSeeder::class);
@@ -86,6 +101,40 @@ class TransactionServiceTest extends TestCase
         $this->assertObjectHasProperty('spending', $response);
         $this->assertObjectHasProperty('created_at', $response);
         $this->assertObjectHasProperty('updated_at', $response);
+    }
+
+    public function test_update()
+    {
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+
+        $category = Category::select('*')->whereOr('code',  '!=', $this->category->code)->first();
+
+        $transactionFirst = Transaction::select('*')->first();
+
+        $periodId = $this->periodService->createGetId($this->user, 1, 2024);
+
+        $transaction = new TransactionDomain();
+        $transaction->code = $transactionFirst->code;
+        $transaction->categoryId = $category->id;
+        $transaction->periodId = $periodId;
+        $transaction->date = mktime(1, 1, 1, 1, 20, 2024);
+        $transaction->description = 'lontong';
+        $transaction->income = $category->type == 'income' ? 20000 : 0;
+        $transaction->spending = $category->type == 'spending' ? 20000 : 0;
+
+        $this->transactionService->update($this->user, $transaction);
+
+        $this->assertDatabaseHas('transactions', [
+            'code' => $transactionFirst->code,
+            'description' => 'lontong',
+            'date' => mktime(0, 0, 0, 1, 20, 2024),
+            'category_id' => $category->id,
+            'period_id' => $periodId,
+            'income' => $category->type == 'income' ? 20000 : 0,
+            'spending' => $category->type == 'spending' ? 20000 : 0,
+        ]);
     }
 
     public function test_delete()

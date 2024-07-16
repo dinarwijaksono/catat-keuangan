@@ -10,4 +10,11 @@ class TransactionController extends Controller
     {
         return view('Transaction.create-transaction');
     }
+
+    public function edit(string $code)
+    {
+        $data['transaction_code'] = $code;
+
+        return view('Transaction.edit-transaction', $data);
+    }
 }

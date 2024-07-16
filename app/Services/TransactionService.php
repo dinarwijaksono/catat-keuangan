@@ -53,6 +53,43 @@ class TransactionService
 
 
     // read
+    public function getByCode(User $user, string $code): object
+    {
+        self::boot($user);
+
+        try {
+
+            $transaction = DB::table('transactions')
+                ->join('categories', 'categories.id', '=', 'transactions.category_id')
+                ->select([
+                    'transactions.code',
+                    'categories.id as category_id',
+                    'categories.code as category_code',
+                    'categories.name as category_name',
+                    'categories.type as category_type',
+                    'transactions.date',
+                    'transactions.description',
+                    'transactions.income',
+                    'transactions.spending',
+                    'transactions.created_at',
+                    'transactions.updated_at'
+                ])
+                ->where('transactions.user_id', $user->id)
+                ->where('transactions.code', $code)
+                ->first();
+
+            Log::info('get transaction by code success');
+
+            return $transaction;
+        } catch (\Throwable $th) {
+            Log::error('get transaction by code failed', [
+                'message' => $th->getMessage()
+            ]);
+
+            return collect([]);
+        }
+    }
+
     public function getByDate(User $user, $date): Collection
     {
         self::boot($user);
@@ -90,6 +127,36 @@ class TransactionService
             return $transaction;
         } catch (\Throwable $th) {
             Log::error('get transaction by date failed', [
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    // update
+    public function update(User $user, TransactionDomain $transactionDomain): void
+    {
+        self::boot($user);
+
+        try {
+
+            $day = date('j', $transactionDomain->date);
+            $month = date('n', $transactionDomain->date);
+            $year = date('Y', $transactionDomain->date);
+
+            Transaction::where('code', $transactionDomain->code)
+                ->update([
+                    'category_id' => $transactionDomain->categoryId,
+                    'period_id' => $transactionDomain->periodId,
+                    'date' => mktime(0, 0, 0, $month, $day, $year),
+                    'description' => strtolower($transactionDomain->description),
+                    'income' => $transactionDomain->income,
+                    'spending' => $transactionDomain->spending,
+                    'updated_at' => round(microtime(true) * 1000),
+                ]);
+
+            Log::info('update transaction success');
+        } catch (\Throwable $th) {
+            Log::error('update transaction failed', [
                 'message' => $th->getMessage()
             ]);
         }

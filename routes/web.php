@@ -16,6 +16,7 @@ Route::get("/edit-category/{code}", [CategoryController::class, 'edit'])->middle
 
 // TransactionController
 Route::get('/create-transaction', [TransactionController::class, 'create'])->middleware('auth');
+Route::get('/edit-transaction/{code}', [TransactionController::class, 'edit'])->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -38,7 +38,8 @@
                         <td>
                             <div class="flex gap-2 px-2">
                                 <div class="basis-6/12">
-                                    <x-zara.button-primary>Edit</x-zara.button-primary>
+                                    <x-zara.link-button-success
+                                        href="/edit-transaction/{{ $key->code }}">Edit</x-zara.link-button-success>
                                 </div>
 
                                 <div class="basis-6/12">
