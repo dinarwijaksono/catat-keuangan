@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Livewire\Home;
 
+use App\Livewire\Component\AlertSuccess;
 use App\Livewire\Home\TransactionInToday;
 use App\Models\Transaction;
 use App\Models\User;
@@ -42,5 +43,17 @@ class TransactionInTodayTest extends TestCase
         Livewire::test(TransactionInToday::class)
             ->assertStatus(200)
             ->assertSeeHtml("<h2 class='title'>Transaksi Hari Ini</h2>");
+    }
+
+    public function test_do_delete()
+    {
+        Livewire::test(TransactionInToday::class)
+            ->call('doDelete', $this->transactionFirst->code)
+            ->assertDispatchedTo(AlertSuccess::class, 'alert-show')
+            ->assertDispatched('delete-success');
+
+        $this->assertDatabaseMissing('transactions', [
+            'code' => $this->transactionFirst->code
+        ]);
     }
 }

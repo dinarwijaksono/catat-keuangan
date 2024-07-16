@@ -42,7 +42,8 @@
                                 </div>
 
                                 <div class="basis-6/12">
-                                    <x-zara.button-danger>Hapus</x-zara.button-danger>
+                                    <x-zara.button-danger
+                                        wire:click="doDelete('{{ $key->code }}')">Hapus</x-zara.button-danger>
                                 </div>
                             </div>
                         </td>

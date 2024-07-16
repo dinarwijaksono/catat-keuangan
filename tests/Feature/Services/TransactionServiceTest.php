@@ -87,4 +87,19 @@ class TransactionServiceTest extends TestCase
         $this->assertObjectHasProperty('created_at', $response);
         $this->assertObjectHasProperty('updated_at', $response);
     }
+
+    public function test_delete()
+    {
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+
+        $transaction = Transaction::select('*')->first();
+
+        $this->transactionService->delete($this->user, $transaction->code);
+
+        $this->assertDatabaseMissing('transactions', [
+            'code' => $transaction->code
+        ]);
+    }
 }

@@ -94,4 +94,19 @@ class TransactionService
             ]);
         }
     }
+
+    // delete
+    public function delete(User $user, $transactionCode): void
+    {
+        self::boot($user);
+
+        try {
+            Transaction::where('code', $transactionCode)
+                ->delete();
+
+            Log::info('delete transaction success');
+        } catch (\Throwable $th) {
+            Log::error('delete transaction failed');
+        }
+    }
 }
