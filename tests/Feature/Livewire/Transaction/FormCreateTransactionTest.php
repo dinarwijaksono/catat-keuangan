@@ -49,7 +49,8 @@ class FormCreateTransactionTest extends TestCase
             ->set('category', $this->category->id)
             ->set('total', 10000)
             ->set('description', 'makan malam')
-            ->call('doCreateTransaction');
+            ->call('doCreateTransaction')
+            ->assertRedirect('/');
 
         $category = Category::select('*')->first();
 
@@ -71,7 +72,8 @@ class FormCreateTransactionTest extends TestCase
             ->set('category', $this->category->id)
             ->set('total', 10000)
             ->set('description', 'makanan')
-            ->call('doCreateTransaction');
+            ->call('doCreateTransaction')
+            ->assertRedirect('/');
 
         Livewire::test(FormCreateTransaction::class)
             ->set('date', '2024-03-10')
@@ -79,7 +81,8 @@ class FormCreateTransactionTest extends TestCase
             ->set('category', $this->category->id)
             ->set('total', 2500)
             ->set('description', 'jajan')
-            ->call('doCreateTransaction');
+            ->call('doCreateTransaction')
+            ->assertRedirect('/');
 
         $this->assertDatabaseHas('transactions', [
             'user_id' => $this->user->id,

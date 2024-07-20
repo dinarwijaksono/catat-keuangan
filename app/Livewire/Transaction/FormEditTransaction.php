@@ -104,7 +104,7 @@ class FormEditTransaction extends Component
             Log::info("do edit transaction success");
             DB::commit();
 
-            return redirect('/');
+            return redirect('/')->with('alert-success', "Transaksi berhasil di edit.");
         } catch (\Throwable $th) {
             DB::rollBack();
 

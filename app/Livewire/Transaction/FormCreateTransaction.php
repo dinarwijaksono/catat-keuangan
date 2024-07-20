@@ -125,10 +125,10 @@ class FormCreateTransaction extends Component
             $this->description = '';
             $this->showTotal = 0;
 
-            $this->dispatch('alert-show', "Transaksi berhasil di buat.")->to(AlertSuccess::class);
-
             Log::info('do create transaction success');
             DB::commit();
+
+            return redirect('/')->with('alert-success', "Transaksi berhasil di simpan.");
         } catch (\Throwable $th) {
             DB::rollBack();
 
