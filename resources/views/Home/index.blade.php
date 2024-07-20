@@ -39,7 +39,8 @@
                                 ])>
                                     {{ number_format($key->total_income - $key->total_spending) }}</td>
                                 <td>
-                                    <x-zara.link-button-success>Detail</x-zara.link-button-success>
+                                    <x-zara.link-button-success
+                                        href="/detail-transaction/{{ $key->date }}">Detail</x-zara.link-button-success>
                                 </td>
                             </tr>
                         @endforeach

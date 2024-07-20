@@ -20,4 +20,11 @@ class HomeController extends Controller
 
         return view('Home.index', $data);
     }
+
+    public function detailTransactionInDay($date)
+    {
+        $data['date'] = $date;
+
+        return view('Home.detail-transaction-in-day', $data);
+    }
 }
