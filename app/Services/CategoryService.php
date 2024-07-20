@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CategoryService
@@ -36,6 +37,30 @@ class CategoryService
             Log::info('create category success');
         } catch (\Throwable $th) {
             Log::error('create category failed', [
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function createGetId(User $user, string $name, string $type): int
+    {
+        self::boot($user);
+
+        try {
+            $id = DB::table('categories')->insertGetId([
+                'user_id' => $user->id,
+                'code' => 'C' . random_int(1, 999999999),
+                'name' => strtolower($name),
+                'type' => $type,
+                'created_at' => round(microtime(true) * 1000),
+                'updated_at' => round(microtime(true) * 1000),
+            ]);
+
+            Log::info('create category get id success');
+
+            return $id;
+        } catch (\Throwable $th) {
+            Log::error('create category get id failed', [
                 'message' => $th->getMessage()
             ]);
         }

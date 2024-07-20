@@ -41,6 +41,20 @@ class CategoryServiceTest extends TestCase
         ]);
     }
 
+    public function test_create_get_id()
+    {
+        $name = 'Example name';
+        $type = 'spending';
+
+        $response = $this->categoryService->createGetId($this->user, $name, $type);
+
+        $this->assertIsInt($response);
+        $this->assertDatabaseHas('categories', [
+            'id' => $response,
+            'name' => $name,
+            'type' => $type
+        ]);
+    }
 
     public function test_get_by_code()
     {
