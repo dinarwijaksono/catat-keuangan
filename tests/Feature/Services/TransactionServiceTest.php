@@ -103,6 +103,21 @@ class TransactionServiceTest extends TestCase
         $this->assertObjectHasProperty('updated_at', $response);
     }
 
+    public function test_get_recent()
+    {
+        for ($i = 0; $i < 100; $i++) {
+            $this->seed(TransactionSeeder::class);
+        }
+
+        $response = $this->transactionService->getRecent($this->user);
+
+        $this->assertIsObject($response);
+
+        $first = $response->first();
+        $this->assertObjectHasProperty('total_income', $first);
+        $this->assertObjectHasProperty('total_spending', $first);
+    }
+
     public function test_update()
     {
         $this->seed(TransactionSeeder::class);

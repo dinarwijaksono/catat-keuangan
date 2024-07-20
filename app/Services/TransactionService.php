@@ -132,6 +132,35 @@ class TransactionService
         }
     }
 
+    public function getRecent(User $user): Collection
+    {
+        self::boot($user);
+
+        try {
+            $transaction = DB::table('transactions')
+                ->select(
+                    'date',
+                    DB::raw('sum(spending) as total_spending'),
+                    DB::raw('sum(income) as total_income')
+                )->groupBy('date')
+                ->where('user_id', $user->id)
+                ->orderByDesc('date')
+                ->skip(0)
+                ->take(30)
+                ->get();
+
+            Log::info('get success');
+
+            return $transaction;
+        } catch (\Throwable $th) {
+            Log::error('get failed', [
+                'message' => $th->getMessage()
+            ]);
+
+            return collect([]);
+        }
+    }
+
     // update
     public function update(User $user, TransactionDomain $transactionDomain): void
     {
