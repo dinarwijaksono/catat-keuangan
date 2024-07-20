@@ -80,6 +80,18 @@ class CategoryServiceTest extends TestCase
         $this->assertFalse($response);
     }
 
+    public function test_get_by_name_and_type()
+    {
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+
+        $category = Category::select('*')->first();
+
+        $response = $this->categoryService->getByNameAndType($this->user, $category->name, $category->type);
+
+        $this->assertEquals($category->id, $response->id);
+    }
+
     public function test_get_by_code()
     {
         $this->seed(CategorySeeder::class);

@@ -107,6 +107,27 @@ class CategoryService
         }
     }
 
+    public function getByNameAndType(User $user, string $name, string $type): object
+    {
+        self::boot($user);
+
+        try {
+            $category = Category::select('id', 'user_id', 'code', 'name', 'type', 'created_at', 'updated_at')
+                ->where('user_id', $user->id)
+                ->where('name', $name)
+                ->where('type', $type)
+                ->first();
+
+            Log::info('get category by name and type success');
+
+            return $category;
+        } catch (\Throwable $th) {
+            Log::error('get category by name and type failed', [
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
     public function getAll(User $user): Collection
     {
         self::boot($user);
