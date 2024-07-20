@@ -11,13 +11,13 @@
 
         <div class="form-group">
             <label for="file">File</label>
-            <input type="file" id="file">
+            <input type="file" wire:model="file" id="file">
             <x-zara.text-error :name="__('file')" />
         </div>
 
         <div class="form-group flex justify-end">
             <div class="basis-3/12">
-                <x-zara.button-primary>Import data</x-zara.button-primary>
+                <x-zara.button-primary wire:click="doImport">Import data</x-zara.button-primary>
             </div>
         </div>
 
