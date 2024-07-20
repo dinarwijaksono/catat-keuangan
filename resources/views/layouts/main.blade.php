@@ -40,6 +40,10 @@
                     <a href="/category">
                         <li>Kategori</li>
                     </a>
+
+                    <a href="/generate-data">
+                        <li>Import / Export</li>
+                    </a>
                 </ul>
 
             </aside>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\GenerateDataController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
@@ -18,6 +19,9 @@ Route::get("/edit-category/{code}", [CategoryController::class, 'edit'])->middle
 // TransactionController
 Route::get('/create-transaction', [TransactionController::class, 'create'])->middleware('auth');
 Route::get('/edit-transaction/{code}', [TransactionController::class, 'edit'])->middleware('auth');
+
+// GenerateDataController
+Route::get('/generate-data', [GenerateDataController::class, 'index'])->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

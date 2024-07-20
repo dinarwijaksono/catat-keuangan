@@ -14,7 +14,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class TransactionInTodayTest extends TestCase
+class TransactionInDayTest extends TestCase
 {
     public $user;
     public $transactionFirst;
