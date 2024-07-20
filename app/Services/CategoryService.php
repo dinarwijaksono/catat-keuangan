@@ -67,6 +67,27 @@ class CategoryService
     }
 
     // read
+    public function checkIsExist(User $user, string $name, string $type): bool
+    {
+        self::boot($user);
+
+        try {
+            $category = Category::select('id')
+                ->where('user_id', $user->id)
+                ->where('name', trim($name))
+                ->where('type', $type)
+                ->get();
+
+            Log::info('check is exist success');
+
+            return !$category->isEmpty();
+        } catch (\Throwable $th) {
+            Log::error('check is exist failed', [
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
     public function getByCode(User $user, string $categoryCode): object
     {
         self::boot($user);

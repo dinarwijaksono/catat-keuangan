@@ -56,6 +56,30 @@ class CategoryServiceTest extends TestCase
         ]);
     }
 
+    public function test_check_is_exist_return_true()
+    {
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+
+        $category = Category::select('*')->first();
+
+        $response = $this->categoryService->checkIsExist($this->user, $category->name, $category->type);
+
+        $this->assertTrue($response);
+    }
+
+    public function test_check_is_exist_return_false()
+    {
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+
+        $category = Category::select('*')->first();
+
+        $response = $this->categoryService->checkIsExist($this->user, "category is empty", $category->type);
+
+        $this->assertFalse($response);
+    }
+
     public function test_get_by_code()
     {
         $this->seed(CategorySeeder::class);
