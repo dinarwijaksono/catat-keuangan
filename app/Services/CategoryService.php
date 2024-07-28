@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Category;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -172,17 +173,46 @@ class CategoryService
 
 
     // delete
-    public function delete(User $user, string $categoryCode): void
+    public function delete(User $user, string $categoryCode): bool
     {
-        self::boot($user);
-
         try {
-            Category::where('code', $categoryCode)
+
+            $category = Category::select('id')
+                ->where('user_id', $user->id)
+                ->where('code', $categoryCode)
+                ->first();
+
+            $transaction = Transaction::select('id', 'category_id')
+                ->where('user_id', $user->id)
+                ->where('category_id', $category->id)
+                ->get();
+
+            if ($transaction->count() > 0) {
+                Log::error('delete category failed', [
+                    'user_id' => $user->id,
+                    'user_name' => $user->name,
+                    'message' => 'category is used'
+                ]);
+                return false;
+            }
+
+            Category::where('user_id', $user->id)
+                ->where('code', $categoryCode)
                 ->delete();
 
-            Log::info('delete category success');
+            Log::info('delete category success', [
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+            ]);
+            return true;
         } catch (\Throwable $th) {
-            Log::error('delete category failed');
+            Log::alert('delete category failed', [
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'message' => $th->getMessage()
+            ]);
+
+            return false;
         }
     }
 }

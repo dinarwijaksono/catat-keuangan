@@ -3,9 +3,11 @@
 namespace Tests\Feature\Services;
 
 use App\Models\Category;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Services\CategoryService;
 use Database\Seeders\CategorySeeder;
+use Database\Seeders\TransactionSeeder;
 use Database\Seeders\UserRegisterSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -134,15 +136,38 @@ class CategoryServiceTest extends TestCase
         ]);
     }
 
-    public function test_delete()
+    public function test_delete_category_used()
+    {
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+
+        $transaction = Transaction::select('*')->first();
+
+        $category = Category::select('*')
+            ->where('id', $transaction->category_id)
+            ->first();
+
+        $response = $this->categoryService->delete($this->user, $category->code);
+
+        $this->assertFalse(($response));
+        $this->assertDatabaseHas('categories', [
+            'code' => $category->code
+        ]);
+    }
+
+    public function test_delete_success()
     {
         $this->seed(CategorySeeder::class);
         $this->seed(CategorySeeder::class);
 
         $category = Category::select('*')->first();
 
-        $this->categoryService->delete($this->user, $category->code);
+        $response = $this->categoryService->delete($this->user, $category->code);
 
+        $this->assertTrue($response);
         $this->assertDatabaseMissing('categories', [
             'code' => $category->code
         ]);

@@ -4,6 +4,7 @@
     <section class="content">
 
         @livewire('component.alert-success')
+        @livewire('component.alert-danger')
 
         @livewire('category.box-category')
 

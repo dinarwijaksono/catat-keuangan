@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Category;
 
+use App\Livewire\Component\AlertDanger;
 use App\Livewire\Component\AlertSuccess;
 use App\Services\CategoryService;
 use Illuminate\Support\Facades\App;
@@ -37,12 +38,17 @@ class BoxCategory extends Component
     public function doDelete(string $code)
     {
         try {
-            $this->categoryService->delete(auth()->user(), $code);
+            $result = $this->categoryService->delete(auth()->user(), $code);
 
-            $this->dispatch('alert-show', "Kategori berhasil di hapus.")->to(AlertSuccess::class);
-            $this->dispatch('delete-category')->self();
+            if ($result) {
+                $this->dispatch('alert-show', "Kategori berhasil di hapus.")->to(AlertSuccess::class);
+                $this->dispatch('delete-category')->self();
 
-            Log::info('do delete by code success');
+                Log::info('do delete by code success');
+            } else {
+                $this->dispatch('alert-show', "Kategori gagal di hapus, kategori masih dipakai pada transaksi.")
+                    ->to(AlertDanger::class);
+            }
         } catch (\Throwable $th) {
             Log::error('do delete by code failed', [
                 'message' => $th->getMessage()
