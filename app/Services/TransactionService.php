@@ -161,6 +161,44 @@ class TransactionService
         }
     }
 
+    public function getByCategory(User $user,  $categoryId): Collection
+    {
+        try {
+            $transaction = DB::table('transactions')
+                ->join('periods', 'periods.id', '=', 'transactions.period_id')
+                ->select([
+                    'transactions.code',
+                    'periods.period_date',
+                    'periods.period_name',
+                    'transactions.date',
+                    'transactions.description',
+                    'transactions.income',
+                    'transactions.spending',
+                    'transactions.created_at',
+                    'transactions.updated_at'
+                ])
+                ->where('transactions.user_id', $user->id)
+                ->where('transactions.category_id', $categoryId)
+                ->orderByDesc('transactions.date')
+                ->get();
+
+            Log::info('get transaction by category success', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+            ]);
+
+            return $transaction;
+        } catch (\Throwable $th) {
+            Log::alert('get transaction by category failed', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'message' => $th->getMessage()
+            ]);
+
+            return collect([]);
+        }
+    }
+
     // update
     public function update(User $user, TransactionDomain $transactionDomain): void
     {

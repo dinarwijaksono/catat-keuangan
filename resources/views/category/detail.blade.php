@@ -54,5 +54,7 @@
 
         </section>
 
+        @livewire('category.box-transaction-by-category', ['categoryCode' => $categoryCode])
+
     </section>
 @endsection

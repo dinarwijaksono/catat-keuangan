@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\CategoryService;
+use App\Services\TransactionService;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -30,7 +31,10 @@ class CategoryController extends Controller
 
     public function detail(string $categoryCode)
     {
-        $data['category'] = $this->categoryService->getByCode($this->user, $categoryCode);
+        $category = $this->categoryService->getByCode($this->user, $categoryCode);
+
+        $data['categoryCode'] = $categoryCode;
+        $data['category'] = $category;
 
         return view('category.detail', $data);
     }

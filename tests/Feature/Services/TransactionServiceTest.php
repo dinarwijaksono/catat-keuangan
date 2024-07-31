@@ -118,6 +118,23 @@ class TransactionServiceTest extends TestCase
         $this->assertObjectHasProperty('total_spending', $first);
     }
 
+    public function test_get_by_category()
+    {
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+
+        $transaction = Transaction::select('*')->first();
+
+        $response =  $this->transactionService->getByCategory($this->user, $transaction->category_id);
+
+        $response = $response->first();
+        $this->assertObjectHasProperty('code', $response);
+        $this->assertObjectHasProperty('period_date', $response);
+        $this->assertObjectHasProperty('period_name', $response);
+    }
+
     public function test_update()
     {
         $this->seed(TransactionSeeder::class);
