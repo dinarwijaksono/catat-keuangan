@@ -1737,6 +1737,18 @@ div.alert-success div button {
   width: 100%;
 }
 
+.w-9 {
+  width: 2.25rem;
+}
+
+.w-9\/12 {
+  width: 75%;
+}
+
+.w-6\/12 {
+  width: 50%;
+}
+
 .min-w-0 {
   min-width: 0px;
 }

@@ -15,6 +15,7 @@ Route::get('/detail-transaction/{date}', [HomeController::class, 'detailTransact
 // CategoryController
 Route::get('/category', [CategoryController::class, 'index'])->middleware('auth');
 Route::get("/edit-category/{code}", [CategoryController::class, 'edit'])->middleware('auth');
+Route::get("/category/detail/{categoryCode}", [CategoryController::class, 'detail'])->middleware('auth');
 
 // TransactionController
 Route::get('/create-transaction', [TransactionController::class, 'create'])->middleware('auth');

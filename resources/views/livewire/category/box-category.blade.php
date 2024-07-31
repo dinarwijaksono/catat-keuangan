@@ -19,7 +19,7 @@
                 @foreach ($categories as $key)
                     <tr>
                         <td class="p-1 text-center w-1/12">{{ $loop->iteration }}</td>
-                        <td class="p-1 w-3/12">{{ $key->name }}</td>
+                        <td class="p-1 w-3/12"><a href="category/detail/{{ $key->code }}">{{ $key->name }}</a></td>
                         <td class="p-1 text-center w-2/12">
                             <span @class([
                                 'bg-danger' => $key->type == 'spending',
