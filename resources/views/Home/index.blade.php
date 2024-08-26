@@ -1,55 +1,43 @@
 @extends('layouts.main')
 
 @section('main-section')
-    <section class="content">
+    <section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
+        <p class="text-[14px] mb-4">Senin, 12 April 2024</p>
 
-        @livewire('component.alert-success', [
-            'isHidden' => session()->missing('alert-success'),
-            'message' => session()->get('alert-success'),
-        ])
+        <table class="w-full mb-4" aria-describedby="my-table">
+            <tr class="sm:hidden">
+                <th>Kategori - Deskripsi</th>
+                <th>Nilai</th>
+            </tr>
 
-        @livewire('home.transaction-in-today')
+            <tr class="border-b">
+                <td class="py-1"><a href="" class="text-blue-500">Makanan</a> - Makan siang</td>
+                <td class="text-right text-red-600">10.000</td>
+            </tr>
 
-        <section class="box">
-            <div class="box-body border-b">
+            <tr class="border-b">
+                <td class="py-1"><a href="" class="text-blue-500">Gaji</a> - Gaji</td>
+                <td class="text-right text-green-600">10.000</td>
+            </tr>
 
-                <table class="table-simple w-full" aria-describedby="my-table">
-                    <thead>
-                        <tr class="bg-yellow-300">
-                            <th>Tanggal</th>
-                            <th>Pemasukan</th>
-                            <th>Pengeluaran</th>
-                            <th>Selisih</th>
-                            <th></th>
-                        </tr>
-                    </thead>
+        </table>
 
-                    <tbody>
-                        @foreach ($transactionRecent as $key)
-                            <tr class="hover:bg-slate-200">
-                                <td class="text-center">{{ date('d F Y', $key->date) }}</td>
-                                <td class="text-right text-green-500">
-                                    {{ $key->total_income == 0 ? '-' : number_format($key->total_income) }}</td>
-                                <td class="text-right text-red-500">
-                                    {{ $key->total_spending == 0 ? '-' : number_format($key->total_spending) }}</td>
-                                <td @class([
-                                    'text-right',
-                                    'text-green-500' => $key->total_income - $key->total_spending > 0,
-                                    'text-red-500' => $key->total_income - $key->total_spending < 0,
-                                ])>
-                                    {{ number_format($key->total_income - $key->total_spending) }}</td>
-                                <td>
-                                    <x-zara.link-button-success
-                                        href="/detail-transaction/{{ $key->date }}">Detail</x-zara.link-button-success>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+        <table aria-describedby="my-table" class="mb-4 w-full rounded-sm shadow-sm">
+            <tr class="bg-yellow-300 ">
+                <th class="font-normal w-4/12 border py-1 text-[14px]">Pemasukan</th>
+                <th class="font-normal w-4/12 border py-1 text-[14px]">Pengeluaran</th>
+                <th class="font-normal w-4/12 border py-1 text-[14px]">Selisih</th>
+            </tr>
 
+            <tr>
+                <td class="text-center border p-1 text-green-600">10.000</td>
+                <td class="text-center border p-1 text-red-600">10.000</td>
+                <td class="text-center border p-1">10.000</td>
+            </tr>
+        </table>
 
-            </div>
-        </section>
+        <button class="mb-4 my-4 bg-green-600 hover:bg-green-700 rounded-sm text-white py-1 w-full text-[14x]">Tambah
+            Transaksi</button>
 
     </section>
 @endsection

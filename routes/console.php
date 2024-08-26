@@ -16,6 +16,6 @@ Artisan::command('migrate:fresh-test', function () {
     $this->comment("Migrate database test success....");
 })->purpose('Run migrate to database test');
 
-Artisan::command('tailwind-start', function () {
+Artisan::command('tailwind:start', function () {
     system("npx tailwind -i ./resources/css/app.css -o ./public/asset/zara/style.css --watch");
 })->purpose("Runing tailwind");

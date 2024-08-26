@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GenerateDataController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,9 @@ Route::get('/edit-transaction/{code}', [TransactionController::class, 'edit'])->
 
 // GenerateDataController
 Route::get('/generate-data', [GenerateDataController::class, 'index'])->middleware('auth');
+
+// SettingController
+Route::get('/setting', [SettingController::class, 'index'])->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
