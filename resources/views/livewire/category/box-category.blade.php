@@ -1,56 +1,65 @@
-<section class="box">
-    <div class="box-header mb-4">
-        <h3 class="title">List Kategori</h3>
+<section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
+    <h3 class="font-semibold mb-4">List Kategori</h3>
+
+    <div class="flex mb-4 gap-2">
+        <div class="basis-6/12">
+            <x-zara.button-primary-outline type="button" wire:click="toSetType('income')"
+                @class([
+                    'rounded-sm py-1 px-2 w-full text-[14px]',
+                    'border border-blue-500 bg-blue-100 hover:bg-blue-700 text-blue-500 hover:text-white' =>
+                        $type != 'income',
+                    'border border-blue-500 bg-blue-500 hover:bg-blue-700 text-blue-500 text-white' =>
+                        $type == 'income',
+                ])>Pemasukan</x-zara.button-primary-outline>
+        </div>
+
+        <div class="basis-6/12">
+            <x-zara.button-primary-outline type="button" wire:click="toSetType('spending')"
+                @class([
+                    'rounded-sm py-1 px-2 w-full text-[14px]',
+                    'border border-blue-500 bg-blue-100 hover:bg-blue-700 text-blue-500 hover:text-white' =>
+                        $type != 'spending',
+                    'border border-blue-500 bg-blue-500 hover:bg-blue-700 text-blue-500 text-white' =>
+                        $type == 'spending',
+                ])>Pengeluaran</x-zara.button-primary-outline>
+        </div>
     </div>
 
-    <div class="box-body">
-
-        <table class="table-simple w-full" aria-describedby="my-table">
-            <tr class="bg-green-300 text-slate-600">
-                <th style="width: 10">No</th>
-                <th>Nama</th>
-                <th>Type</th>
-                <th>Dibuat</th>
-                <th>Diedit</th>
-                <th></th>
+    <div class="mb-4">
+        <table class="w-full mb-4" aria-describedby="my-table">
+            <tr>
+                <th class="font-normal w-9/12 border py-1 text-[14px]">Nama</th>
+                <th class="font-normal w-3/12 border py-1 text-[14px]"></th>
             </tr>
 
-            <tbody>
-                @foreach ($categories as $key)
-                    <tr>
-                        <td class="p-1 text-center w-1/12">{{ $loop->iteration }}</td>
-                        <td class="p-1 w-3/12"><a href="category/detail/{{ $key->code }}">{{ $key->name }}</a></td>
-                        <td class="p-1 text-center w-2/12">
-                            <span @class([
-                                'bg-danger' => $key->type == 'spending',
-                                'bg-success' => $key->type == 'income',
-                                'px-2',
-                                'text-[12px]',
-                                'rounded',
-                                'text-white',
-                            ])>
-                                {{ $key->type == 'income' ? 'Pemasukan' : 'Pengeluaran' }}
-                            </span>
-                        </td>
-                        <td class="p-1 w-2/12 text-center">{{ date('H:i - j F Y', $key->created_at / 1000) }}</td>
-                        <td class="p-1 w-2/12 text-center">{{ date('H:i - j F Y', $key->updated_at / 1000) }}</td>
-                        <td class="p-1 w-2/12">
-                            <div class="flex gap-2">
-                                <div class="basis-6/12">
-                                    <x-zara.link-button-success
-                                        href="/edit-category/{{ $key->code }}">Edit</x-zara.link-button-success>
-                                </div>
-
-                                <div class="basis-6/12">
-                                    <x-zara.button-danger
-                                        wire:click="doDelete('{{ $key->code }}')">Hapus</x-zara.button-danger>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
+            @foreach ($categories as $item)
+                <tr>
+                    <td class="border py-1 px-2">{{ $item->name }}</td>
+                    <td class="border py-1 px-2">
+                        <x-zara.button-danger>Hapus</x-zara.button-danger>
+                    </td>
+                </tr>
+            @endforeach
         </table>
-
     </div>
+
+    <hr class="mb-4">
+
+    <div class="mb-2">
+        <h3 class="font-semibold mb-4">Buat kategori</h3>
+
+        <div class="mb-2">
+            <label for="name">Nama</label>
+            <input type="text" id="name" wire:model="categoryName"
+                class="w-full rounded-sm py-1 px-2 text-[14px] focus:ring-none focus:outline-none"
+                placeholder="Nama kategori" autocomplete="off">
+        </div>
+
+        <div class="flex justify-end">
+            <div class="w-3/12">
+                <x-zara.button-primary type="button" wire:click="doCreateCategory">Simpan</x-zara.button-primary>
+            </div>
+        </div>
+    </div>
+
 </section>
