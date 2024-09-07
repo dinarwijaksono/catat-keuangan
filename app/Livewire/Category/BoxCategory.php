@@ -52,6 +52,8 @@ class BoxCategory extends Component
 
     public function doCreateCategory()
     {
+        $this->dispatch('alert-hide')->to(AlertSuccess::class);
+
         $this->categoryService->create($this->user, $this->categoryName, $this->type);
 
         $this->dispatch('alert-show', message: "Kategori berhasil disimpan.")->to(AlertSuccess::class);

@@ -36,7 +36,8 @@
                 <tr>
                     <td class="border py-1 px-2">{{ $item->name }}</td>
                     <td class="border py-1 px-2">
-                        <x-zara.button-danger>Hapus</x-zara.button-danger>
+                        <x-zara.button-danger type="button"
+                            wire:click="doDelete('{{ $item->code }}')">Hapus</x-zara.button-danger>
                     </td>
                 </tr>
             @endforeach
