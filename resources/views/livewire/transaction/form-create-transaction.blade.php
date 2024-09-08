@@ -1,47 +1,45 @@
-<section class="box">
-    <div class="box-header mb-4">
-        <h3 class="title">Buat Transaksi</h3>
-    </div>
+<section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
+    <h3 class="font-semibold mb-4">List Kategori</h3>
 
     <div class="box-body mb-4">
 
-        <div class="form-group">
+        <div class="mb-4">
             <label for="tanggal">Tanggal</label>
-            <input type="date" wire:model="date" id="tanggal">
+            <x-zara.input-date wire:model="date" />
 
             <x-zara.text-error :name="__('date')" />
         </div>
 
-        <div class="form-group">
+        <div class="mb-4">
             <label for="type">Type</label>
 
             <input type="hidden" wire:model="type">
 
             <div class="flex gap-2">
                 <div class="basis-6/12">
-                    <x-zara.radio-button-info wire:click="setType('income')"
+                    <x-zara.button-primary-outline wire:click="setType('income')"
                         @class([
-                            'underline' => $type == 'income',
-                            'bg-slate-600' => $type == 'income',
-                        ])>Pemasukan</x-zara.radio-button-info>
+                            'underline bg-blue-600 text-white' => $type == 'income',
+                        ])>Pemasukan</x-zara.button-primary-outline>
                 </div>
 
                 <div class="basis-6/12">
-                    <x-zara.radio-button-info wire:click="setType('spending')"
+                    <x-zara.button-primary-outline wire:click="setType('spending')"
                         @class([
-                            'underline' => $type == 'spending',
-                            'bg-slate-600' => $type == 'spending',
-                        ])>Pengeluaran</x-zara.radio-button-info>
+                            'underline bg-blue-600 text-white' => $type == 'spending',
+                        ])>Pengeluaran</x-zara.button-primary-outline>
                 </div>
             </div>
 
             <x-zara.text-error :name="__('type')" />
         </div>
 
-        <div class="form-group">
+        <div class="mb-4">
             <label for="category">Kategori</label>
 
-            <select wire:model="category" id="category">
+            <select wire:model="category" id="category"
+                class="w-full rounded-sm py-1 px-2 text-[14px] focus:ring-none focus:outline-none">
+                <option>-- pilih --</option>
                 @foreach ($listSelectCategory as $key)
                     <option value="{{ $key->id }}">{{ $key->name }}</option>
                 @endforeach
@@ -50,18 +48,18 @@
             <x-zara.text-error :name="__('category')" />
         </div>
 
-
-
-        <div class="form-group">
+        <div class="mb-2">
             <label for="total">Jumlah</label>
-            <input type="number" id="total" wire:keyDown="setTotal" wire:model="total" placeholder="0">
-
-            <p class="text-green-700">Rp {{ number_format($showTotal) }}</p>
+            <input type="text" id="total" wire:model="total" wire:keyUp="setTotal"
+                class="w-full rounded-sm py-1 px-2 text-[14px] focus:ring-none focus:outline-none" placeholder="0"
+                autocomplete="off">
 
             <x-zara.text-error :name="__('total')" />
+
+            <p class="text-green-600">{{ 'Rp ' . number_format($showTotal) }}</p>
         </div>
 
-        <div class="form-group">
+        <div class="mb-4">
             <label for="description">Deskripsi</label>
             <x-zara.input-text placeholder="Deskripsi" wire:model="description" />
 

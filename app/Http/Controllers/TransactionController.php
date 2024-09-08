@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function create()
+    public function create(int $date)
     {
-        return view('Transaction.create-transaction');
+        $data['date'] = $date;
+
+        return view('Transaction.create-transaction', $data);
     }
 
     public function edit(string $code)

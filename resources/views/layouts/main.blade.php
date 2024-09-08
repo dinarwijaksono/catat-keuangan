@@ -25,6 +25,13 @@
                 @livewire('component.navbar')
 
                 <!-- Alert -->
+                @if (session()->has('success'))
+                    @livewire('component.alert-success', [
+                        'message' => session()->get('success'),
+                        'isHidden' => false,
+                    ])
+                @endif
+
                 @livewire('component.alert-success')
                 @livewire('component.alert-danger')
 

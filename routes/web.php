@@ -10,16 +10,18 @@ use Illuminate\Support\Facades\Route;
 
 // HomeController
 Route::get('/', [HomeController::class, 'index'])->middleware('auth');
-Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [HomeController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 Route::get('/detail-transaction/{date}', [HomeController::class, 'detailTransactionInDay'])->middleware('auth');
 
 // CategoryController
 Route::get('/category', [CategoryController::class, 'index'])->middleware('auth');
-Route::get("/edit-category/{code}", [CategoryController::class, 'edit'])->middleware('auth');
-Route::get("/category/detail/{categoryCode}", [CategoryController::class, 'detail'])->middleware('auth');
+Route::get('/edit-category/{code}', [CategoryController::class, 'edit'])->middleware('auth');
+Route::get('/category/detail/{categoryCode}', [CategoryController::class, 'detail'])->middleware('auth');
 
 // TransactionController
-Route::get('/create-transaction', [TransactionController::class, 'create'])->middleware('auth');
+Route::get('/create-transaction/{date}', [TransactionController::class, 'create'])->middleware('auth');
 Route::get('/edit-transaction/{code}', [TransactionController::class, 'edit'])->middleware('auth');
 
 // GenerateDataController

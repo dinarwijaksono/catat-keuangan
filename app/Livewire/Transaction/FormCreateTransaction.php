@@ -46,7 +46,7 @@ class FormCreateTransaction extends Component
 
     public function mount()
     {
-        $this->date = date('Y-m-d');
+        $this->date = date('Y-m-d', $this->date);
 
         $this->type = 'spending';
 
@@ -56,8 +56,6 @@ class FormCreateTransaction extends Component
             $this->type = 'income';
             $this->listSelectCategory = $this->listCategory->where('type', 'income');
         }
-
-        $this->category = $this->listSelectCategory->first()->id;
     }
 
     public function getRules()
@@ -128,7 +126,7 @@ class FormCreateTransaction extends Component
             Log::info('do create transaction success');
             DB::commit();
 
-            return redirect('/')->with('alert-success', "Transaksi berhasil di simpan.");
+            return redirect('/')->with('success', "Transaksi berhasil di simpan.");
         } catch (\Throwable $th) {
             DB::rollBack();
 

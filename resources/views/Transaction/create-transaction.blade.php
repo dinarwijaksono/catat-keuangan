@@ -3,9 +3,7 @@
 @section('main-section')
     <section class="content">
 
-        @livewire('component.alert-success')
-
-        @livewire('transaction.form-create-transaction')
+        @livewire('transaction.form-create-transaction', ['date' => $date])
 
     </section>
 @endsection

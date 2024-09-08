@@ -1,73 +1,52 @@
-<section class="box">
-    <div class="box-header">
-        <h2 class='title'>Detail Transaksi</h2>
-    </div>
+<section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
+    <p class="text-[14px] mb-4">{{ date('j F Y', $date) }}</p>
 
-    <div class="box-body mb-2">
-        <p class="text-right underline">{{ date('j F Y') }}</p>
+    <table class="w-full mb-4" aria-describedby="my-table">
+        <tr class="sm:hidden">
+            <th>Kategori - Deskripsi</th>
+            <th>Nilai</th>
+        </tr>
 
-        <table class="w-full mb-4" aria-describedby="my-table">
-            <thead>
-                <tr class="bg-slate-300">
-                    <th class="p-1">Kategori - Deskrpisi</th>
-                    <th>Pemasukan</th>
-                    <th>Pengeluaran</th>
-                    <th></th>
-                </tr>
-            </thead>
+        @php
+            $incomeTotal = 0;
+            $spendingTotal = 0;
+        @endphp
+        @foreach ($transaction as $key)
+            <tr class="border-b">
+                <td class="py-1"><a href="" class="text-blue-500">{{ $key->category_name }}</a> -
+                    {{ $key->description }}</td>
+                <td @class([
+                    'text-right',
+                    'text-green-600' => $key->income != 0,
+                    'text-red-500' => $key->spending != 0,
+                ])>
+                    {{ $key->income != 0 ? number_format($key->income) : number_format($key->spending) }}</td>
+            </tr>
 
-            <tbody>
-                @php
-                    $totalIncome = 0;
-                    $totalSpending = 0;
-                @endphp
+            @php
+                $incomeTotal += $key->income;
+                $spendingTotal += $key->spending;
+            @endphp
+        @endforeach
 
-                @foreach ($transactionToday as $key)
-                    @php
-                        $totalIncome += $key->income;
-                        $totalSpending += $key->spending;
-                    @endphp
+    </table>
 
-                    <tr class="border-b border-slate-500 p-2">
-                        <td class="px-2"><a href="#">{{ $key->category_name }}</a> - {{ $key->description }}
-                        </td>
-                        <td class="text-green-500 text-right px-4">
-                            {{ $key->income != 0 ? number_format($key->income) : '-' }}</td>
-                        <td class="text-red-500 text-right px-4">
-                            {{ $key->spending != 0 ? number_format($key->spending) : '-' }}</td>
-                        <td>
-                            <div class="flex gap-2 px-2">
-                                <div class="basis-6/12">
-                                    <x-zara.link-button-success
-                                        href="/edit-transaction/{{ $key->code }}">Edit</x-zara.link-button-success>
-                                </div>
+    <table aria-describedby="my-table" class="mb-4 w-full rounded-sm shadow-sm">
+        <tr class="bg-yellow-300 ">
+            <th class="font-normal w-4/12 border py-1 text-[14px]">Pemasukan</th>
+            <th class="font-normal w-4/12 border py-1 text-[14px]">Pengeluaran</th>
+            <th class="font-normal w-4/12 border py-1 text-[14px]">Selisih</th>
+        </tr>
 
-                                <div class="basis-6/12">
-                                    <x-zara.button-danger
-                                        wire:click="doDelete('{{ $key->code }}')">Hapus</x-zara.button-danger>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
+        <tr>
+            <td class="text-center border p-1 text-green-600">{{ number_format($incomeTotal) }}</td>
+            <td class="text-center border p-1 text-red-600">{{ number_format($spendingTotal) }}</td>
+            <td class="text-center border p-1">{{ number_format($incomeTotal - $spendingTotal) }}</td>
+        </tr>
+    </table>
 
-            <tfoot>
-                <tr class="bg-yellow-300">
-                    <td class="font-bold text-center p-1">Total</td>
-                    <td class="text-green-500 text-right px-4 font-bold">
-                        {{ $totalIncome != 0 ? number_format($totalIncome) : '-' }}</td>
-                    <td class="text-red-500 text-right px-4 font-bold">
-                        {{ $totalSpending != 0 ? number_format($totalSpending) : '-' }}
-                    </td>
-                    <td></td>
-                </tr>
+    <a href="/create-transaction/{{ $date }}"
+        class="block text-center mb-4 my-4 bg-green-600 hover:bg-green-700 rounded-sm text-white py-1 w-full text-[14x]">Tambah
+        Transaksi</a>
 
-            </tfoot>
-        </table>
-
-    </div>
-
-    <div class="box-header">
-        <x-zara.link-button-success href="/create-transaction">Tambah Transaksi</x-zara.link-button-success>
 </section>

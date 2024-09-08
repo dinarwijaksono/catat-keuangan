@@ -11,7 +11,7 @@ use Livewire\Component;
 class TransactionInDay extends Component
 {
     public $date;
-    public $transactionToday;
+    public $transaction;
 
     protected $transactionService;
 
@@ -23,7 +23,7 @@ class TransactionInDay extends Component
         ]);
 
         $this->transactionService = App::make(TransactionService::class);
-        $this->transactionToday = $this->transactionService->getByDate(auth()->user(), $this->date);
+        $this->transaction = $this->transactionService->getByDate(auth()->user(), $this->date);
     }
 
     public function getListeners()
