@@ -5,12 +5,14 @@
         <tr class="sm:hidden">
             <th>Kategori - Deskripsi</th>
             <th>Nilai</th>
+            <th></th>
         </tr>
 
         @php
             $incomeTotal = 0;
             $spendingTotal = 0;
         @endphp
+
         @foreach ($transaction as $key)
             <tr class="border-b">
                 <td class="py-1"><a href="" class="text-blue-500">{{ $key->category_name }}</a> -
@@ -21,6 +23,10 @@
                     'text-red-500' => $key->spending != 0,
                 ])>
                     {{ $key->income != 0 ? number_format($key->income) : number_format($key->spending) }}</td>
+                <td>
+                    <x-zara.button-danger type="button" wire:click="doDelete('{{ $key->code }}')"
+                        class="m-1">Hapus</x-zara.button-danger>
+                </td>
             </tr>
 
             @php
