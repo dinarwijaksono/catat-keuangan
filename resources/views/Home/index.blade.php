@@ -21,7 +21,8 @@
                     <td class="py-1 px-2 border border-slate-300 text-right text-red-600">
                         {{ number_format($item->total_spending) }}</td>
                     <td class="py-1 px-2 border border-slate-300">
-                        <x-zara.link-button-success href="/#">Detail</x-zara.link-button-success>
+                        <x-zara.link-button-success
+                            href="/Home/detail-transaction/{{ $item->date }}">Detail</x-zara.link-button-success>
                     </td>
                 </tr>
             @endforeach

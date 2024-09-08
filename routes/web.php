@@ -13,7 +13,7 @@ Route::get('/', [HomeController::class, 'index'])->middleware('auth');
 Route::get('/dashboard', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
-Route::get('/detail-transaction/{date}', [HomeController::class, 'detailTransactionInDay'])->middleware('auth');
+Route::get('/Home/detail-transaction/{date}', [HomeController::class, 'detailTransactionInDay'])->middleware('auth');
 
 // CategoryController
 Route::get('/category', [CategoryController::class, 'index'])->middleware('auth');
