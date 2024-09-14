@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('main-section')
-    <section class="content">
+    <section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
 
         <section class="box">
             <div class="box-header mb-4">
@@ -39,10 +39,10 @@
                 </table>
             </div>
 
-            <div class="box-footer flex gap-2 justify-end">
+            <div class="box-footer flex gap-2 justify-end mb-4">
 
                 <div class="basis-2/12">
-                    <x-zara.link-button-danger href="/category">Kembali</x-zara.link-button-danger>
+                    <x-zara.link-button-danger href="/">Kembali</x-zara.link-button-danger>
                 </div>
 
                 <div class="basis-2/12">

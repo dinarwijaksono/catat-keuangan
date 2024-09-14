@@ -34,7 +34,9 @@
 
             @foreach ($categories as $item)
                 <tr>
-                    <td class="border py-1 px-2">{{ $item->name }}</td>
+                    <td class="border py-1 px-2"><a href="/category/detail/{{ $item->code }}"
+                            class="text-blue-400 hover:underline">{{ $item->name }}</a>
+                    </td>
                     <td class="border py-1 px-2">
                         <x-zara.button-danger type="button"
                             wire:click="doDelete('{{ $item->code }}')">Hapus</x-zara.button-danger>

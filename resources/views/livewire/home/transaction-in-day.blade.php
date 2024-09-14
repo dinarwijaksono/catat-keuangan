@@ -15,7 +15,8 @@
 
         @foreach ($transaction as $key)
             <tr class="border-b">
-                <td class="py-1"><a href="" class="text-blue-500">{{ $key->category_name }}</a> -
+                <td class="py-1"><a href="/category/detail/{{ $key->category_code }}"
+                        class="text-blue-500">{{ $key->category_name }}</a> -
                     {{ $key->description }}</td>
                 <td @class([
                     'text-right',
