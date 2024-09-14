@@ -1,9 +1,9 @@
-<section class="box">
-    <div class="box-header mb-4">
+<section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
+    <div class="mb-4">
         <h3 class="title">Import dari file CSV</h3>
     </div>
 
-    <div class="box-body">
+    <div class="mb-4">
 
         <x-zara.button-primary wire:click="doDownloadFormat">Download Format</x-zara.button-primary>
 
