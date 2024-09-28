@@ -149,11 +149,11 @@ class TransactionService
                 ->take(30)
                 ->get();
 
-            Log::info('get success');
+            Log::info('get recent success');
 
             return $transaction;
         } catch (\Throwable $th) {
-            Log::error('get failed', [
+            Log::error('get recent failed', [
                 'message' => $th->getMessage()
             ]);
 
