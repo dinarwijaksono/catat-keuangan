@@ -170,7 +170,7 @@ return [
         Recorders\SlowJobs::class => [
             'enabled' => env('PULSE_SLOW_JOBS_ENABLED', true),
             'sample_rate' => env('PULSE_SLOW_JOBS_SAMPLE_RATE', 1),
-            'threshold' => env('PULSE_SLOW_JOBS_THRESHOLD', 1000),
+            'threshold' => env('PULSE_SLOW_JOBS_THRESHOLD', 1500),
             'ignore' => [
                 // '/^Package\\\\Jobs\\\\/',
             ],
@@ -179,7 +179,7 @@ return [
         Recorders\SlowOutgoingRequests::class => [
             'enabled' => env('PULSE_SLOW_OUTGOING_REQUESTS_ENABLED', true),
             'sample_rate' => env('PULSE_SLOW_OUTGOING_REQUESTS_SAMPLE_RATE', 1),
-            'threshold' => env('PULSE_SLOW_OUTGOING_REQUESTS_THRESHOLD', 1000),
+            'threshold' => env('PULSE_SLOW_OUTGOING_REQUESTS_THRESHOLD', 1500),
             'ignore' => [
                 // '#^http://127\.0\.0\.1:13714#', // Inertia SSR...
             ],
@@ -193,7 +193,7 @@ return [
         Recorders\SlowQueries::class => [
             'enabled' => env('PULSE_SLOW_QUERIES_ENABLED', true),
             'sample_rate' => env('PULSE_SLOW_QUERIES_SAMPLE_RATE', 1),
-            'threshold' => env('PULSE_SLOW_QUERIES_THRESHOLD', 1000),
+            'threshold' => env('PULSE_SLOW_QUERIES_THRESHOLD', 1500),
             'location' => env('PULSE_SLOW_QUERIES_LOCATION', true),
             'max_query_length' => env('PULSE_SLOW_QUERIES_MAX_QUERY_LENGTH', null),
             'ignore' => [
@@ -205,9 +205,9 @@ return [
         Recorders\SlowRequests::class => [
             'enabled' => env('PULSE_SLOW_REQUESTS_ENABLED', true),
             'sample_rate' => env('PULSE_SLOW_REQUESTS_SAMPLE_RATE', 1),
-            'threshold' => env('PULSE_SLOW_REQUESTS_THRESHOLD', 1000),
+            'threshold' => env('PULSE_SLOW_REQUESTS_THRESHOLD', 1500),
             'ignore' => [
-                '#^/'.env('PULSE_PATH', 'pulse').'$#', // Pulse dashboard...
+                '#^/' . env('PULSE_PATH', 'pulse') . '$#', // Pulse dashboard...
                 '#^/telescope#', // Telescope dashboard...
             ],
         ],
@@ -224,7 +224,7 @@ return [
             'enabled' => env('PULSE_USER_REQUESTS_ENABLED', true),
             'sample_rate' => env('PULSE_USER_REQUESTS_SAMPLE_RATE', 1),
             'ignore' => [
-                '#^/'.env('PULSE_PATH', 'pulse').'$#', // Pulse dashboard...
+                '#^/' . env('PULSE_PATH', 'pulse') . '$#', // Pulse dashboard...
                 '#^/telescope#', // Telescope dashboard...
             ],
         ],
