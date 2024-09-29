@@ -58,4 +58,22 @@ class ReportServiceTest extends TestCase
         $this->assertEquals($totalIncome->total, $amount->total_income);
         $this->assertEquals($totalSpending->total, $amount->total_spending);
     }
+
+    public function test_get_totalcategory_by_period()
+    {
+        $period = DB::table('transactions')
+            ->select('period_id')
+            ->where('user_id', $this->user->id)
+            ->first();
+
+        $transaction = $this->reportService->getTotalCategoryByPeriod($this->user, $period->period_id);
+
+        $this->assertIsObject($transaction);
+
+        $tran = $transaction->first();
+
+        $this->assertObjectHasProperty('category_name', $tran);
+        $this->assertObjectHasProperty('period_name', $tran);
+        $this->assertObjectHasProperty('period_is_close', $tran);
+    }
 }
