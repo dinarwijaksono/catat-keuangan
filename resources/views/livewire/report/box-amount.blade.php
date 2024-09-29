@@ -8,12 +8,14 @@
 
         <tr>
             <td class="p-1">Pemasukan</td>
-            <td class="text-right text-green-600 p-1">{{ number_format($this->amount->total_income, 0) }}</td>
+            <td class="text-right text-green-600 p-1">
+                {{ $this->amount->total_income == null ? 0 : number_format($this->amount->total_income, 0) }}</td>
         </tr>
 
         <tr>
             <td class="p-1">Pengeluaran</td>
-            <td class="text-right text-red-600 p-1">{{ number_format($this->amount->total_spending, 0) }}</td>
+            <td class="text-right text-red-600 p-1">
+                {{ $this->amount->total_spending == null ? 0 : number_format($this->amount->total_spending, 0) }}</td>
         </tr>
 
         <tr class="bg-yellow-100">
