@@ -1,6 +1,21 @@
 <section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
-
     @if ($transaction != null)
+
+        <div class="mb-4 flex gap-1">
+            <div class="basis-10/12 p-1">
+                <select wire:model="periodSelect" class="w-full px-2 py-1 rounded text-[14px]">
+                    @foreach ($listPeriod as $period)
+                        <option value="{{ $period->id }}">{{ $period->period_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="basis-2/12 p-1">
+                <x-zara.button-primary wire:click="doSelectPeriod"
+                    class="border-2 border-blue-500 hover:border-blue-600">Cari</x-zara.button-primary>
+            </div>
+        </div>
+
         <div class="mb-4">
             <h3 class="font-bold mb-2 underline">Kategori Pemasukan</h3>
 
@@ -66,6 +81,6 @@
                 </tr>
             </table>
         </div>
-    @endif
 
+    @endif
 </section>

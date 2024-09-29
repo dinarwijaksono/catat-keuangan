@@ -97,4 +97,31 @@ class PeriodService
             ]);
         }
     }
+
+    public function getAll(User $user)
+    {
+        try {
+            $period = Period::select(
+                'id',
+                'period_date',
+                'period_name',
+                'is_close',
+                'created_at',
+                'updated_at'
+            )
+                ->where('user_id', $user->id)
+                ->orderByDesc('period_date')
+                ->get();
+
+            Log::info('get all period success');
+
+            return $period;
+        } catch (\Throwable $th) {
+            Log::error('get all period failed', [
+                'message' => $th->getMessage()
+            ]);
+
+            return collect([]);
+        }
+    }
 }

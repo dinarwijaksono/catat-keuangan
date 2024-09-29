@@ -2,16 +2,19 @@
 
 namespace App\Livewire\Report;
 
+use App\Services\PeriodService;
 use App\Services\ReportService;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class BoxTotalCategoryByPeriod extends Component
 {
+    protected $periodService;
     protected $reportService;
 
+    public $listPeriod;
+    public $periodSelect;
     public $transaction;
 
     public function boot()
@@ -21,19 +24,24 @@ class BoxTotalCategoryByPeriod extends Component
             'user_email' => auth()->user()->email,
         ]);
 
+        $this->periodService = App::make(PeriodService::class);
         $this->reportService = App::make(ReportService::class);
 
-        $period = DB::table('transactions')
-            ->select('period_id')
-            ->where('user_id', auth()->user()->id)
-            ->orderByDesc('date')
-            ->first();
+        $this->listPeriod = $this->periodService->getAll(auth()->user());
+    }
 
-        if ($period == null) {
+    public function mount()
+    {
+        if ($this->listPeriod == null) {
             $this->transaction = null;
         } else {
-            $this->transaction = $this->reportService->getTotalCategoryByPeriod(auth()->user(), $period->period_id);
+            $this->transaction = $this->reportService->getTotalCategoryByPeriod(auth()->user(), $this->listPeriod->first()->id);
         }
+    }
+
+    public function doSelectPeriod()
+    {
+        $this->transaction = $this->reportService->getTotalCategoryByPeriod(auth()->user(), $this->periodSelect);
     }
 
     public function render()

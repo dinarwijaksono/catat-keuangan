@@ -4,6 +4,8 @@ namespace Tests\Feature\Services;
 
 use App\Models\User;
 use App\Services\PeriodService;
+use Database\Seeders\CategorySeeder;
+use Database\Seeders\TransactionSeeder;
 use Database\Seeders\UserRegisterSeeder;
 use Hamcrest\Type\IsInteger;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -69,5 +71,22 @@ class PeriodServiceTest extends TestCase
         $this->assertEquals($response->period_date, mktime(0, 0, 0, 1, 1, 2024));
         $this->assertEquals($response->period_name, date('F Y', mktime(0, 0, 0, 1, 1, 2024)));
         $this->assertEquals($response->is_close, false);
+    }
+
+    public function test_get_all()
+    {
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+
+        $period = $this->periodService->getAll($this->user);
+        $period = $period->first();
+
+        $this->assertArrayHasKey('period_date', $period);
+        $this->assertArrayHasKey('period_name', $period);
     }
 }
