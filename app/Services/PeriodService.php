@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Period;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -98,7 +99,7 @@ class PeriodService
         }
     }
 
-    public function getAll(User $user)
+    public function getAll(User $user): Collection | null
     {
         try {
             $period = Period::select(
@@ -115,13 +116,13 @@ class PeriodService
 
             Log::info('get all period success');
 
-            return $period;
+            return $period->isEmpty() ? null : $period;
         } catch (\Throwable $th) {
             Log::error('get all period failed', [
                 'message' => $th->getMessage()
             ]);
 
-            return collect([]);
+            return null;
         }
     }
 }

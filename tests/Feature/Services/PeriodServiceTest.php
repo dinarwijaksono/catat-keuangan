@@ -89,4 +89,11 @@ class PeriodServiceTest extends TestCase
         $this->assertArrayHasKey('period_date', $period);
         $this->assertArrayHasKey('period_name', $period);
     }
+
+    public function test_get_all_is_null()
+    {
+        $period = $this->periodService->getAll($this->user);
+
+        $this->assertNull($period);
+    }
 }

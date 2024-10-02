@@ -32,7 +32,7 @@ class BoxTotalCategoryByPeriod extends Component
 
     public function mount()
     {
-        if ($this->listPeriod == null) {
+        if (is_null($this->listPeriod)) {
             $this->transaction = null;
         } else {
             $this->transaction = $this->reportService->getTotalCategoryByPeriod(auth()->user(), $this->listPeriod->first()->id);
