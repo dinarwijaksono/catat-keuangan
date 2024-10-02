@@ -50,4 +50,21 @@ class UserRepositoryTest extends TestCase
             'date' => 10
         ]);
     }
+
+    public function test_check_by_email_true()
+    {
+        $this->seed(UserSeeder::class);
+        $user = User::select('*')->first();
+
+        $response = $this->userRepository->checkByEmail($user->email);
+
+        $this->assertTrue($response);
+    }
+
+    public function test_check_by_email_false()
+    {
+        $response = $this->userRepository->checkByEmail("example@gmail.com");
+
+        $this->assertFalse($response);
+    }
 }

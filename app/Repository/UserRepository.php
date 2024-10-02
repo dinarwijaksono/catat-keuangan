@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class UserRepository
 {
+    // create
     public function create(string $name, string $email, string $password): User
     {
         try {
@@ -50,5 +51,13 @@ class UserRepository
                 'message' => $th->getMessage()
             ]);
         }
+    }
+
+    // read
+    public function checkByEmail(string $email): bool
+    {
+        $user = User::select('email')->where('email', $email)->get();
+
+        return !$user->isEmpty();
     }
 }
