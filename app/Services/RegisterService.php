@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\RegisterException;
 use App\Repository\TokenRepository;
 use App\Repository\UserRepository;
 use Exception;
@@ -26,12 +27,12 @@ class RegisterService
             DB::beginTransaction();
 
             if ($this->userRepository->checkByEmail($email)) {
-                throw new Exception("Email not unique.");
+                throw new RegisterException("Email not unique.");
             }
 
             $user = $this->userRepository->create($name, $email, $password);
             $this->userRepository->setStartDate($user, 1);
-            $token = $this->tokenRepository->create($user);
+            $token = $this->tokenRepository->create($email);
 
             DB::commit();
 

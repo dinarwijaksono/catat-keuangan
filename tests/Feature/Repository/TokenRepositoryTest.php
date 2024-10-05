@@ -24,9 +24,9 @@ class TokenRepositoryTest extends TestCase
         $this->user = User::select('*')->first();
     }
 
-    public function test_create(): void
+    public function test_create_success(): void
     {
-        $response = $this->tokenRespository->create($this->user);
+        $response = $this->tokenRespository->create($this->user->email);
 
         $this->assertIsString($response);
 
@@ -34,5 +34,12 @@ class TokenRepositoryTest extends TestCase
             'user_id' => $this->user->id,
             'token' => $response,
         ]);
+    }
+
+    public function test_create_failed()
+    {
+        $response = $this->tokenRespository->create("email@gmail.com");
+
+        $this->assertNull($response);
     }
 }

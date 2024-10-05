@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Models\StartDate;
 use App\Models\User;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
@@ -59,5 +61,39 @@ class UserRepository
         $user = User::select('email')->where('email', $email)->get();
 
         return !$user->isEmpty();
+    }
+
+    public function checkPassword(string $email, string $password): bool
+    {
+        $user = User::select('password')
+            ->where('email', $email)
+            ->first();
+
+        return Hash::check($password, $user->password);
+    }
+
+    public function getByEmail(string $email): Object
+    {
+        $user = DB::table('users')
+            ->join('api_tokens', 'api_tokens.user_id', '=', 'users.id')
+            ->join('start_dates', 'start_dates.user_id', '=', 'users.id')
+            ->select(
+                'users.id',
+                'api_tokens.token as api_token',
+                'api_tokens.expired_at as token_expired',
+                'start_dates.date as start_date',
+                'users.name',
+                'users.email',
+                'users.created_at',
+                'users.updated_at'
+            )
+            ->where('users.email', $email)
+            ->first();
+
+        Log::info("get by email success", [
+            'email' => $email
+        ]);
+
+        return $user;
     }
 }

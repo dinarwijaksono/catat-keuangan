@@ -9,10 +9,12 @@ use Illuminate\Support\Str;
 
 class TokenRepository
 {
-    public function create(User $user): string | null
+    public function create(string $email): string | null
     {
         try {
             $token = Str::random(30);
+
+            $user = User::select('id')->where('email', $email)->first();
 
             ApiToken::create([
                 'user_id' => $user->id,
@@ -23,13 +25,14 @@ class TokenRepository
             ]);
 
             Log::info("insert api token to database success", [
-                'email' => $user->email
+                'email' => $email
             ]);
 
             return $token;
         } catch (\Throwable $th) {
             Log::error("insert api token to database failed", [
-                'email' => $user->email
+                'email' => $email,
+                'message' => $th->getMessage()
             ]);
 
             return null;

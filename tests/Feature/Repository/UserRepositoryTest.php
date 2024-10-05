@@ -4,6 +4,7 @@ namespace Tests\Feature\Repository;
 
 use App\Models\User;
 use App\Repository\UserRepository;
+use Database\Seeders\UserRegisterSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -66,5 +67,39 @@ class UserRepositoryTest extends TestCase
         $response = $this->userRepository->checkByEmail("example@gmail.com");
 
         $this->assertFalse($response);
+    }
+
+    public function test_check_password_true()
+    {
+        $this->seed(UserRegisterSeeder::class);
+        $user = User::select('*')->first();
+
+        $response = $this->userRepository->checkPassword($user->email, 'rahasia');
+
+        $this->assertTrue($response);
+    }
+
+    public function test_check_password_false()
+    {
+        $this->seed(UserRegisterSeeder::class);
+        $user = User::select('*')->first();
+
+        $response = $this->userRepository->checkPassword($user->email, 'salah');
+
+        $this->assertFalse($response);
+    }
+
+    public function test_get_by_email()
+    {
+        $this->seed(UserRegisterSeeder::class);
+        $user = User::select('*')->first();
+
+        $response = $this->userRepository->getByEmail($user->email);
+
+        $this->assertObjectHasProperty('api_token', $response);
+        $this->assertObjectHasProperty('token_expired', $response);
+        $this->assertObjectHasProperty('start_date', $response);
+        $this->assertObjectHasProperty('name', $response);
+        $this->assertObjectHasProperty('email', $response);
     }
 }
