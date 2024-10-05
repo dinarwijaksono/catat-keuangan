@@ -2,13 +2,14 @@
 
 namespace Tests\Feature\Http\ControllerApi;
 
+use App\Models\ApiToken;
 use App\Models\User;
 use Database\Seeders\UserRegisterSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class AuthControllerApiTest extends TestCase
+class AuthControllerTest extends TestCase
 {
     public function test_register_success(): void
     {
@@ -103,5 +104,54 @@ class AuthControllerApiTest extends TestCase
             'errors' => ['message']
         ]);
         $response->assertJsonPath('errors.message', 'Email or password is wrong.');
+    }
+
+    public function test_get_current_user_success()
+    {
+        $this->seed(UserRegisterSeeder::class);
+
+        $t = ApiToken::select('*')->first();
+
+        $response = $this->withHeaders([
+            'api-token' => $t->token
+        ])->get("/api/current-user");
+
+        $response->assertStatus(200);
+        $this->assertIsObject($response);
+
+        $response->assertJsonStructure([
+            'data' => ['name', 'email', 'start_date', 'created_at', 'updated_at']
+        ]);
+    }
+
+    public function test_get_current_user_but_token_is_wrong()
+    {
+        $this->seed(UserRegisterSeeder::class);
+
+        $response = $this->withHeaders([
+            'api-token' => 'abcefh'
+        ])->get("/api/current-user");
+
+        $response->assertStatus(401);
+
+        $response->assertJsonStructure(['message']);
+        $response->assertJsonPath('message', 'Token salah.');
+    }
+
+    public function test_get_current_user_but_token_has_expired()
+    {
+        $this->seed(UserRegisterSeeder::class);
+        $t = ApiToken::first();
+
+        ApiToken::where('token', $t->token)->update([
+            'expired_at' => round(microtime(true)) - 10 * 1000
+        ]);
+
+        $response = $this->withHeaders([
+            'api-token' => $t->token
+        ])->get("/api/current-user");
+
+        $response->assertStatus(401);
+        $response->assertJsonPath('message', 'Token expired.');
     }
 }

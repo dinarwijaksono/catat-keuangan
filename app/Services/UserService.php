@@ -4,11 +4,23 @@ namespace App\Services;
 
 use App\Models\StartDate;
 use App\Models\User;
+use App\Repository\TokenRepository;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use stdClass;
 
 class UserService
 {
+    protected $tokenRepository;
+
     protected $user;
+
+    public function __construct(TokenRepository $tokenRepository)
+    {
+        $this->tokenRepository = $tokenRepository;
+    }
 
     public function boot($user)
     {
@@ -44,6 +56,19 @@ class UserService
     }
 
     // read
+    public function checkTokenExpired(string $token): bool
+    {
+        try {
+            Log::info('check token success');
+
+            return $this->tokenRepository->checkExpired($token);
+        } catch (\Throwable $th) {
+            Log::error('check token expired failed', [
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
     public function getStartDate(User $user): object
     {
         self::boot($user);
@@ -60,6 +85,43 @@ class UserService
             Log::error('get start date failed', [
                 'message' => $th->getMessage()
             ]);
+        }
+    }
+
+    public function getByToken(string $token): stdClass | null
+    {
+        try {
+            $user = DB::table('api_tokens')
+                ->join('users', 'users.id', '=', 'api_tokens.user_id')
+                ->join('start_dates', 'start_dates.user_id', '=', 'api_tokens.user_id')
+                ->select(
+                    'users.id',
+                    'start_dates.date as start_date',
+                    'users.name',
+                    'users.email',
+                    'users.created_at',
+                    'users.updated_at'
+                )
+                ->where('api_tokens.token', $token)
+                ->first();
+
+            if (!$user) {
+                throw new ModelNotFoundException("token not found in database");
+            }
+
+            Log::info('get user by token success', [
+                'api-token' => $token,
+                'email' => $user->email
+            ]);
+
+            return $user;
+        } catch (\Throwable $th) {
+            Log::error('get user by token failed', [
+                'api-token' => $token,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
         }
     }
 

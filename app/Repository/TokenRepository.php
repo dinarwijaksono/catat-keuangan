@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 
 class TokenRepository
 {
+    // create
     public function create(string $email): string | null
     {
         try {
@@ -19,7 +20,7 @@ class TokenRepository
             ApiToken::create([
                 'user_id' => $user->id,
                 'token' => $token,
-                'expired_at' => round(microtime(true) * 1000) + 60 * 5 * 1000,
+                'expired_at' => round(microtime(true) * 1000) + 3 * 24 * 60 * 60 * 1000,
                 'created_at' => round(microtime(true) * 1000),
                 'updated_at' => round(microtime(true) * 1000),
             ]);
@@ -37,5 +38,19 @@ class TokenRepository
 
             return null;
         }
+    }
+
+    // read
+    public function checkExpired(string $token): bool
+    {
+        $t = ApiToken::select('expired_at')
+            ->where('token', $token)
+            ->first();
+
+        Log::info('check token expired success', [
+            'token' => $token
+        ]);
+
+        return $t->expired_at < (microtime(true) * 1000);
     }
 }

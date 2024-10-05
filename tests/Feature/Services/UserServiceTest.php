@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Services;
 
+use App\Models\ApiToken;
 use App\Models\User;
 use App\Services\UserService;
+use Database\Seeders\UserRegisterSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -35,6 +37,15 @@ class UserServiceTest extends TestCase
         ]);
     }
 
+    public function test_check_token_expired()
+    {
+        $this->seed(UserRegisterSeeder::class);
+
+        $t = ApiToken::select('*')->first();
+
+        $this->assertFalse($this->userService->checkTokenExpired($t->token));
+    }
+
     public function test_get_start_date()
     {
         $this->userService->setStartDate($this->user, 10);
@@ -44,6 +55,28 @@ class UserServiceTest extends TestCase
         $this->assertIsObject($startDate);
 
         $this->assertEquals($startDate->date, 10);
+    }
+
+    public function test_get_by_token_success()
+    {
+        $this->seed(UserRegisterSeeder::class);
+
+        $t = ApiToken::select('*')->first();
+
+        $response = $this->userService->getByToken($t->token);
+
+        $this->assertIsObject($response);
+        $this->assertObjectHasProperty('name', $response);
+        $this->assertObjectHasProperty('start_date', $response);
+        $this->assertObjectHasProperty('email', $response);
+        $this->assertObjectHasProperty('created_at', $response);
+    }
+
+    public function test_get_by_token_failed()
+    {
+        $response = $this->userService->getByToken('abcdedf');
+
+        $this->assertNull($response);
     }
 
     public function test_update_start_date()

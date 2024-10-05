@@ -2,22 +2,31 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\LoginException;
 use App\Http\Controllers\Controller;
 use App\Services\LoginService;
 use App\Services\RegisterService;
+use App\Services\UserService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Livewire\Attributes\Validate;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
     protected $registerService;
     protected $loginService;
+    protected $userService;
 
-    public function __construct(RegisterService $registerService, LoginService $loginService)
-    {
+    public function __construct(
+        RegisterService $registerService,
+        LoginService $loginService,
+        UserService $userService
+    ) {
         $this->registerService = $registerService;
         $this->loginService = $loginService;
+        $this->userService = $userService;
     }
 
     public function doRegister(Request $request)
@@ -84,5 +93,39 @@ class AuthController extends Controller
                 'email' => $response->email,
             ]
         ], 200);
+    }
+
+    public function getCurrentUser(Request $request)
+    {
+        try {
+            $api_token = $request->header('api-token');
+
+            $key = $this->userService->getByToken($api_token);
+
+            Log::info('/api/curent-user success', [
+                'api-token' => $api_token
+            ]);
+
+            return response()->json([
+                'data' => [
+                    'name' => $key->name,
+                    'email' => $key->email,
+                    'start_date' => $key->start_date,
+                    'created_at' => $key->created_at,
+                    'updated_at' => $key->updated_at,
+                ]
+            ], 200);
+        } catch (\Throwable $th) {
+            $api_token = $request->header('api-token');
+
+            Log::error('/api/curent-user/{api_token} failed', [
+                'api-token' => $api_token,
+                'message' => $th->getMessage()
+            ]);
+
+            return response()->json([
+                'message' => 'user unauthorize'
+            ], 401);
+        }
     }
 }

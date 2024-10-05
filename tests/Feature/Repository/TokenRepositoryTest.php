@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Repository;
 
+use App\Models\ApiToken;
 use App\Models\User;
 use App\Repository\TokenRepository;
 use Database\Seeders\UserSeeder;
@@ -41,5 +42,27 @@ class TokenRepositoryTest extends TestCase
         $response = $this->tokenRespository->create("email@gmail.com");
 
         $this->assertNull($response);
+    }
+
+    public function test_check_expired_true()
+    {
+        $t = $this->tokenRespository->create($this->user->email);
+
+        ApiToken::where('token', $t)->update([
+            'expired_at' => (microtime(true) * 1000) - (10 * 60 * 60 * 1000)
+        ]);
+
+        $response = $this->tokenRespository->checkExpired($t);
+
+        $this->assertTrue($response);
+    }
+
+    public function test_check_expired_false()
+    {
+        $t = $this->tokenRespository->create($this->user->email);
+
+        $response = $this->tokenRespository->checkExpired($t);
+
+        $this->assertFalse($response);
     }
 }
