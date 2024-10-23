@@ -34,7 +34,7 @@ class CategoryServiceTest extends TestCase
         $name = 'Example name';
         $type = 'spending';
 
-        $this->categoryService->create($this->user, $name, $type);
+        $this->categoryService->create($this->user->id, $name, $type);
 
         $this->assertDatabaseHas('categories', [
             'user_id' => $this->user->id,
@@ -48,7 +48,7 @@ class CategoryServiceTest extends TestCase
         $name = 'Example name';
         $type = 'spending';
 
-        $response = $this->categoryService->createGetId($this->user, $name, $type);
+        $response = $this->categoryService->createGetId($this->user->id, $name, $type);
 
         $this->assertIsInt($response);
         $this->assertDatabaseHas('categories', [

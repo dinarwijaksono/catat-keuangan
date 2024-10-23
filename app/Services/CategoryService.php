@@ -21,13 +21,11 @@ class CategoryService
     }
 
     // create
-    public function create(User $user, string $name, string $type): void
+    public function create(int $userId, string $name, string $type): void
     {
-        self::boot($user);
-
         try {
             Category::insert([
-                'user_id' => $user->id,
+                'user_id' => $userId,
                 'code' => 'C' . random_int(1, 999999999),
                 'name' => strtolower($name),
                 'type' => $type,
@@ -43,13 +41,11 @@ class CategoryService
         }
     }
 
-    public function createGetId(User $user, string $name, string $type): int
+    public function createGetId(int $userId, string $name, string $type): int
     {
-        self::boot($user);
-
         try {
             $id = DB::table('categories')->insertGetId([
-                'user_id' => $user->id,
+                'user_id' => $userId,
                 'code' => 'C' . random_int(1, 999999999),
                 'name' => strtolower($name),
                 'type' => $type,

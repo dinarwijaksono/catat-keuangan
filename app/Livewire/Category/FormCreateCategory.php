@@ -47,7 +47,7 @@ class FormCreateCategory extends Component
 
         try {
 
-            $this->categoryService->create(auth()->user(), $this->categoryName, $this->type);
+            $this->categoryService->create(auth()->user()->id, $this->categoryName, $this->type);
 
             $this->categoryName = '';
             $this->type = '';
