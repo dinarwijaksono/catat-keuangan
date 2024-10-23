@@ -154,4 +154,16 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(401);
         $response->assertJsonPath('message', 'Token expired.');
     }
+
+    public function test_logout_success()
+    {
+        $this->seed(UserRegisterSeeder::class);
+        $t = ApiToken::first();
+
+        $response = $this->withHeader('api-token', $t->token)
+            ->delete('/api/logout');
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', 'Berhasil');
+    }
 }

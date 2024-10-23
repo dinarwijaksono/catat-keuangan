@@ -9,3 +9,4 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'doRegister']);
 Route::post('/login', [AuthController::class, 'doLogin']);
 Route::get("/current-user", [AuthController::class, 'getCurrentUser'])->middleware(CheckTokenMiddeware::class);
+Route::delete('/logout', [AuthController::class, 'logout'])->middleware(CheckTokenMiddeware::class);

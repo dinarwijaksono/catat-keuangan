@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Exceptions\LoginException;
 use App\Http\Controllers\Controller;
+use App\Models\ApiToken;
 use App\Services\LoginService;
 use App\Services\RegisterService;
 use App\Services\UserService;
@@ -127,5 +128,20 @@ class AuthController extends Controller
                 'message' => 'user unauthorize'
             ], 401);
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $token = $request->header('api-token');
+
+        ApiToken::where('token', $token)->delete();
+
+        Log::info('Logout success', [
+            'token' => $token
+        ]);
+
+        return response()->json([
+            'message' => 'Berhasil'
+        ], 200);
     }
 }
