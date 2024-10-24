@@ -20,7 +20,7 @@ class TokenRepository
             ApiToken::create([
                 'user_id' => $user->id,
                 'token' => $token,
-                'expired_at' => round(microtime(true) * 1000) + 3 * 24 * 60 * 60 * 1000,
+                'expired_at' => (round(microtime(true) * 1000) + 3 * 24 * 60 * 60) * 1000,
                 'created_at' => round(microtime(true) * 1000),
                 'updated_at' => round(microtime(true) * 1000),
             ]);
@@ -52,5 +52,10 @@ class TokenRepository
         ]);
 
         return $t->expired_at < (microtime(true) * 1000);
+    }
+
+    public function getInfo(string $token): ?ApiToken
+    {
+        return ApiToken::where('token', $token)->first();
     }
 }

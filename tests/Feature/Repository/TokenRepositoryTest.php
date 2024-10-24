@@ -5,6 +5,7 @@ namespace Tests\Feature\Repository;
 use App\Models\ApiToken;
 use App\Models\User;
 use App\Repository\TokenRepository;
+use Database\Seeders\UserRegisterSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -64,5 +65,23 @@ class TokenRepositoryTest extends TestCase
         $response = $this->tokenRespository->checkExpired($t);
 
         $this->assertFalse($response);
+    }
+
+    public function test_get_info()
+    {
+        $this->seed(UserRegisterSeeder::class);
+        $api = ApiToken::first();
+
+        $response = $this->tokenRespository->getInfo($api->token);
+
+        $this->assertNotNull($response);
+        $this->assertEquals($api, $response);
+    }
+
+    public function test_get_info_but_token_is_null()
+    {
+        $response = $this->tokenRespository->getInfo('abcded');
+
+        $this->assertNull($response);
     }
 }
