@@ -28,15 +28,5 @@
             @endforeach
         </table>
 
-        {{-- <div class="flex justify-center mb-4">
-            <div class="basis-2/12 text-center">
-                <x-zara.button-primary>Sebelumnya</x-zara.button-primary>
-            </div>
-            <div class="basis-2/12 text-center">2</div>
-            <div class="basis-2/12 text-center">
-                <x-zara.button-primary>Selanjutnya</x-zara.button-primary>
-            </div>
-        </div> --}}
-
     </section>
 @endsection
