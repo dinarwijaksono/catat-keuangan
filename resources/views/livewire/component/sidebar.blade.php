@@ -12,7 +12,11 @@
                     ])>Beranda</a>
                 </li>
 
-                <li><a href="/" class="block py-3 px-8 hover:bg-gray-300 rounded-y rounded-r-full">Kategori</a>
+                <li><a href="/category" @class([
+                    'block py-3 px-8 rounded-y rounded-r-full',
+                    'bg-orange-200' => request()->path() == 'category',
+                    'hover:bg-gray-300' => request()->path() != 'category',
+                ])>Kategori</a>
                 </li>
 
                 <li><a href="/" class="block py-3 px-8 hover:bg-gray-300 rounded-y rounded-r-full">Laporan</a>

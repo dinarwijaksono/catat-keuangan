@@ -18,17 +18,7 @@ class BoxCategory extends Component
 
     public $user;
 
-    public $type;
     public $categoryName;
-
-    public function mount()
-    {
-        $this->type = 'spending';
-
-        $this->categories = $this->categoryService->getAll($this->user)
-            ->where('type', 'spending')
-            ->sortBy('name');
-    }
 
     public function boot()
     {
@@ -40,6 +30,9 @@ class BoxCategory extends Component
         $this->user = auth()->user();
 
         $this->categoryService = App::make(CategoryService::class);
+
+        $this->categories = $this->categoryService->getAll($this->user)
+            ->sortBy('name');
     }
 
     public function getListeners()
@@ -50,31 +43,7 @@ class BoxCategory extends Component
         ];
     }
 
-    public function doCreateCategory()
-    {
-        $this->dispatch('alert-hide')->to(AlertSuccess::class);
-
-        $this->categoryService->create($this->user, $this->categoryName, $this->type);
-
-        $this->dispatch('alert-show', message: "Kategori berhasil disimpan.")->to(AlertSuccess::class);
-
-        $this->categories = $this->categoryService->getAll($this->user)
-            ->where('type', $this->type)
-            ->sortBy('name');
-
-        $this->categoryName = '';
-    }
-
-    public function toSetType($type)
-    {
-        $this->type = $type;
-
-        $this->categories = $this->categoryService->getAll($this->user)
-            ->where('type', $type)
-            ->sortBy('name');
-    }
-
-    public function doDelete(string $code)
+        public function doDelete(string $code)
     {
         try {
             $result = $this->categoryService->delete(auth()->user(), $code);
@@ -93,6 +62,10 @@ class BoxCategory extends Component
                 'message' => $th->getMessage()
             ]);
         }
+    }
+
+    public function doOpenFormCreateCategory(){
+        $this->dispatch('open-box')->to(FormCreateCategory::class);
     }
 
     public function render()

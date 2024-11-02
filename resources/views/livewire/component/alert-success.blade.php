@@ -1,11 +1,14 @@
 <div @class([
-    'bg-green-100 shadow-sm border border-green-400 text-green-700 px-4 py-3 rounded-sm mb-4 mx-4',
+    'fixed top-24 right-10 w-[800px] mb-4 shadow-lg shadow-slate-500 bg-green-100 border border-green-500 text-green-700 px-4 py-3 rounded-lg',
     'hidden' => $isHidden,
 ])>
-    <p>{{ $message }}</p>
-
+    <div class="mb-4">
+        <p>{{ $message }}</p>
+    </div>
     <div class="flex justify-end">
-        <button wire:click="doHideAlert"
-            class="bg-blue-500 hover:bg-blue-700 text-white text-[13px] rounded-sm py-1 px-2">Tutup</button>
+        <div class="basis-2/12">
+            <button wire:click="doHideAlert"
+                class="px-2 py-0 w-full text-[14px] border border-slate-500 text-slate-700 hover:text-white bg-slate-100 hover:bg-slate-700 rounded-lg">Tutup</button>
+        </div>
     </div>
 </div>

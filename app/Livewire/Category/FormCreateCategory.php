@@ -15,6 +15,8 @@ class FormCreateCategory extends Component
 
     protected $categoryService;
 
+    public $isHidden = true;
+
     public function boot()
     {
         Log::withContext([
@@ -34,6 +36,12 @@ class FormCreateCategory extends Component
         ];
     }
 
+    public function getListeners() {
+        return [
+            'open-box' => 'doShowBox'
+        ];
+    }
+    
     public function doSetType(string $type)
     {
         $this->type = $type;
@@ -51,6 +59,7 @@ class FormCreateCategory extends Component
 
             $this->categoryName = '';
             $this->type = '';
+            $this->isHidden = true;
 
             $this->dispatch('alert-show', message: "Kategori berhasil disimpan.")->to(AlertSuccess::class);
             $this->dispatch('create-category')->to(BoxCategory::class);
@@ -63,6 +72,14 @@ class FormCreateCategory extends Component
         }
     }
 
+    public function doShowBox() {
+        $this->isHidden = false;
+    }
+
+    public function doHideBox() {
+        $this->isHidden = true;
+    }
+    
     public function render()
     {
         return view('livewire.category.form-create-category');
