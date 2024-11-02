@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Livewire\Transaction;
 
+use App\Livewire\Component\AlertSuccess;
 use App\Livewire\Transaction\FormCreateTransaction;
 use App\Models\Category;
 use App\Models\User;
@@ -50,7 +51,7 @@ class FormCreateTransactionTest extends TestCase
             ->set('total', 10000)
             ->set('description', 'makan malam')
             ->call('doCreateTransaction')
-            ->assertRedirect('/');
+            ->assertDispatchedTo(AlertSuccess::class, 'alert-show');
 
         $category = Category::select('*')->first();
 
@@ -73,7 +74,7 @@ class FormCreateTransactionTest extends TestCase
             ->set('total', 10000)
             ->set('description', 'makanan')
             ->call('doCreateTransaction')
-            ->assertRedirect('/');
+            ->assertDispatchedTo(AlertSuccess::class, 'alert-show');
 
         Livewire::test(FormCreateTransaction::class)
             ->set('date', '2024-03-10')
@@ -82,7 +83,7 @@ class FormCreateTransactionTest extends TestCase
             ->set('total', 2500)
             ->set('description', 'jajan')
             ->call('doCreateTransaction')
-            ->assertRedirect('/');
+            ->assertDispatchedTo(AlertSuccess::class, 'alert-show');
 
         $this->assertDatabaseHas('transactions', [
             'user_id' => $this->user->id,

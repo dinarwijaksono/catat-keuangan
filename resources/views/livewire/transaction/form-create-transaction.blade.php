@@ -1,80 +1,92 @@
-<section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
-    <h3 class="font-semibold mb-4">List Kategori</h3>
+<section @class([
+    'fixed top-0 right-0 left-0 bottom-0 bg-gray-300/75 z-50',
+    'hidden' => $isHidden,
+])>
+    <div class="flex justify-center mt-[70px]">
+        <div class="p-4 bg-white rounded-lg w-5/12 shadow-lg">
+            <h1 class="font-semibold text-center mb-3">Tambah transaksi</h1>
 
-    <div class="box-body mb-4">
+            <div class="mb-4">
+                <label for="date" class="mb-1">Tanggal</label>
+                <input type="date" wire:model="date" id="date" class="w-full border border-gray-300 p-1 rounded-md">
 
-        <div class="mb-4">
-            <label for="tanggal">Tanggal</label>
-            <x-zara.input-date wire:model="date" />
+                @error('date')
+                    <p class="text-red-500 italic text-[14px]">{{ $message }}</p>
+                @enderror
+            </div>
 
-            <x-zara.text-error :name="__('date')" />
-        </div>
+            <div class="mb-4">
+                <label for="date" class="mb-1">Type</label>
+                <div class="flex gap-2 p-2">
+                    <div class="basis-6/12">
+                        <button wire:click="doSetType('income')" @class([
+                            'rounded-lg px-2 py-1 text-white w-full',
+                            'bg-gray-500' => $type != 'income',
+                            'bg-green-500' => $type == 'income',
+                        ])>Pemasukan</button>
+                    </div>
 
-        <div class="mb-4">
-            <label for="type">Type</label>
-
-            <input type="hidden" wire:model="type">
-
-            <div class="flex gap-2">
-                <div class="basis-6/12">
-                    <x-zara.button-primary-outline wire:click="setType('income')"
-                        @class([
-                            'underline bg-blue-600 text-white' => $type == 'income',
-                        ])>Pemasukan</x-zara.button-primary-outline>
+                    <div class="basis-6/12">
+                        <button wire:click="doSetType('spending')" @class([
+                            'rounded-lg px-2 py-1 text-white w-full',
+                            'bg-gray-500' => $type != 'spending',
+                            'bg-green-500' => $type == 'spending',
+                        ])>Pengeluaran</button>
+                    </div>
                 </div>
 
-                <div class="basis-6/12">
-                    <x-zara.button-primary-outline wire:click="setType('spending')"
-                        @class([
-                            'underline bg-blue-600 text-white' => $type == 'spending',
-                        ])>Pengeluaran</x-zara.button-primary-outline>
+                @error('type')
+                    <p class="text-red-500 italic text-[14px]">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="date" class="mb-1">Kategori</label>
+                <select id="category" wire:model="category" class="w-full border border-gray-300 p-1 rounded-md">
+                    <option>-- Pilih kategori --</option>
+                    @foreach ($listSelectCategory as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+
+                @error('category')
+                    <p class="text-red-500 italic text-[14px]">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="date" class="mb-1">Total</label>
+                <input type="text" id="date" wire:model="total" wire:keyup="setTotal"
+                    class="w-full border border-gray-300 p-1 rounded-md px-2" placeholder="Total">
+                <p class="text-green-500">{{ number_format($showTotal) }}</p>
+
+                @error('total')
+                    <p class="text-red-500 italic text-[14px]">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-4">
+                <label for="date" class="mb-1">Deskripsi</label>
+                <input type="text" wire:model="description" id="date"
+                    class="w-full border border-gray-300 p-1 rounded-md px-2" placeholder="Deskripsi">
+
+                @error('description')
+                    <p class="text-red-500 italic text-[14px]">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="flex gap-2 justify-end">
+                <div class="basis-2/12">
+                    <button wire:click="doHideBox"
+                        class="bg-gray-500 hover:bg-gray-700 rounded-lg px-2 py-1 text-white w-full text-[14px]">Batal</button>
+                </div>
+
+                <div class="basis-2/12">
+                    <button wire:click="doCreateTransaction"
+                        class="bg-blue-500 hover:bg-blue-700 rounded-lg px-2 py-1 text-white w-full text-[14px]">Simpan</button>
                 </div>
             </div>
 
-            <x-zara.text-error :name="__('type')" />
-        </div>
-
-        <div class="mb-4">
-            <label for="category">Kategori</label>
-
-            <select wire:model="category" id="category"
-                class="w-full rounded-sm py-1 px-2 text-[14px] focus:ring-none focus:outline-none">
-                <option>-- pilih --</option>
-                @foreach ($listSelectCategory as $key)
-                    <option value="{{ $key->id }}">{{ $key->name }}</option>
-                @endforeach
-            </select>
-
-            <x-zara.text-error :name="__('category')" />
-        </div>
-
-        <div class="mb-2">
-            <label for="total">Jumlah</label>
-            <input type="text" id="total" wire:model="total" wire:keyUp="setTotal"
-                class="w-full rounded-sm py-1 px-2 text-[14px] focus:ring-none focus:outline-none" placeholder="0"
-                autocomplete="off">
-
-            <x-zara.text-error :name="__('total')" />
-
-            <p class="text-green-600">{{ 'Rp ' . number_format($showTotal) }}</p>
-        </div>
-
-        <div class="mb-4">
-            <label for="description">Deskripsi</label>
-            <x-zara.input-text placeholder="Deskripsi" wire:model="description" />
-
-            <x-zara.text-error :name="__('description')" />
-        </div>
-
-    </div>
-
-    <div class="box-footer flex gap-2 justify-end">
-        <div class="basis-3/12">
-            <x-zara.link-button-danger href="/">Batal</x-zara.link-button-danger>
-        </div>
-
-        <div class="basis-3/12">
-            <x-zara.button-primary wire:click="doCreateTransaction">Simpan</x-zara.button-primary>
         </div>
     </div>
 </section>

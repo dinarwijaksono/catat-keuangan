@@ -4,6 +4,7 @@ namespace App\Livewire\Transaction;
 
 use App\Domains\TransactionDomain;
 use App\Livewire\Component\AlertSuccess;
+use App\Livewire\Home\TransactionInDay;
 use App\Services\CategoryService;
 use App\Services\PeriodService;
 use App\Services\TransactionService;
@@ -19,6 +20,8 @@ class FormCreateTransaction extends Component
     public $category;
     public $total;
     public $description;
+
+    public $isHidden = true;
 
     public $showTotal;
 
@@ -69,7 +72,14 @@ class FormCreateTransaction extends Component
         ];
     }
 
-    public function setType(string $type)
+    public function getListeners()
+    {
+        return [
+            'open-box' => 'doShowBox'
+        ];
+    }
+
+    public function doSetType(string $type)
     {
         $this->type = $type;
 
@@ -85,9 +95,19 @@ class FormCreateTransaction extends Component
         }
     }
 
+    public function doShowBox()
+    {
+        $this->isHidden = false;
+    }
+
+    public function doHideBox()
+    {
+        $this->isHidden = true;
+    }
+
     public function doCreateTransaction()
     {
-        $this->dispatch('alert-hide', "Transaksi berhasil di buat.")->to(AlertSuccess::class);
+        $this->dispatch('alert-hide', "")->to(AlertSuccess::class);
 
         $this->validate();
 
@@ -126,7 +146,10 @@ class FormCreateTransaction extends Component
             Log::info('do create transaction success');
             DB::commit();
 
-            return redirect('/')->with('success', "Transaksi berhasil di simpan.");
+            $this->dispatch('alert-show', "Transaksi berhasil di buat.")->to(AlertSuccess::class);
+            $this->dispatch('create-transaction')->to(TransactionInDay::class);
+
+            $this->isHidden = true;
         } catch (\Throwable $th) {
             DB::rollBack();
 

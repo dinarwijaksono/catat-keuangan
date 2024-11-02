@@ -3,6 +3,8 @@
 namespace App\Livewire\Home;
 
 use App\Livewire\Component\AlertSuccess;
+use App\Livewire\Transaction\FormCreateTransaction;
+use App\Livewire\Transaction\FormEditTransaction;
 use App\Services\TransactionService;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
@@ -28,7 +30,21 @@ class TransactionInDay extends Component
 
     public function getListeners()
     {
-        return ['delete-success' => 'render'];
+        return [
+            'delete-success' => 'render',
+            'create-transaction' => 'render',
+            'edit-transaction' => 'render'
+        ];
+    }
+
+    public function doCreateTransaction()
+    {
+        $this->dispatch('open-box')->to(FormCreateTransaction::class);
+    }
+
+    public function doEditTransaction(string $code)
+    {
+        $this->dispatch('open-box', $code)->to(FormEditTransaction::class);
     }
 
     public function doDelete(string $transactionCode)

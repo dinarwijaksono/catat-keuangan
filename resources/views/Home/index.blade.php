@@ -1,32 +1,48 @@
 @extends('layouts.main')
 
 @section('main-section')
-    @livewire('home.transaction-in-day', ['date' => time()])
+    <div class="max-w-3xl mx-auto">
 
-    <section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
+        @livewire('component.alert-success')
 
-        <table aria-describedby="my-table" class="w-full text-slate-600 text-[16px] mb-4">
-            <tr class="bg-yellow-300">
-                <th class="py-1 px-2 border border-slate-300">Tanggal</th>
-                <th class="py-1 px-2 border border-slate-300">Pemasukan</th>
-                <th class="py-1 px-2 border border-slate-300">Pengeluaran</th>
-                <th class="py-1 px-2 border border-slate-300"></th>
-            </tr>
+        @livewire('transaction.form-edit-transaction')
 
-            @foreach ($transactionRecent as $item)
-                <tr>
-                    <td class="py-1 px-2 border border-slate-300 text-center">{{ date('j F Y', $item->date) }}</td>
-                    <td class="py-1 px-2 border border-slate-300 text-right text-green-600">
-                        {{ number_format($item->total_income) }}</td>
-                    <td class="py-1 px-2 border border-slate-300 text-right text-red-600">
-                        {{ number_format($item->total_spending) }}</td>
-                    <td class="py-1 px-2 border border-slate-300">
-                        <x-zara.link-button-success
-                            href="/Home/detail-transaction/{{ $item->date }}">Detail</x-zara.link-button-success>
-                    </td>
-                </tr>
-            @endforeach
-        </table>
 
-    </section>
+        @livewire('transaction.form-create-transaction', ['date' => microtime(true)])
+
+        @livewire('home.transaction-in-day')
+
+        <!-- Note 1 -->
+        <div
+            class="shadow-lg text-gray-800 shadow-slate-300 hover:shadow-slate-500 mb-4 bg-white p-4 rounded-lg border-l-4 border-blue-400">
+            <div class="mb-4 font-semibold">23 Oktober 2024</div>
+
+            <div class="flex justify-center">
+                <table class="basis-11/12">
+                    <tr class="border-b">
+                        <td class="w-6/12 px-2">Pemasukan</td>
+                        <td class="w-6/12 text-right px-2 text-green-500">120.000</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="w-6/12 px-2">Pengeluaran</td>
+                        <td class="w-6/12 text-right px-2 text-red-500">120.000</td>
+                    </tr>
+
+                    <tr class="border-b font-bold">
+                        <td class="w-6/12 px-2">Selisih</td>
+                        <td class="w-6/12 text-right px-2 text-red-500">0</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="flex mt-4 justify-end">
+                <div class="basis-2/12 p-1">
+                    <button class="bg-blue-500 hover:bg-blue-700 rounded-lg px-2 py-1 text-white w-full text-[14px]">Lihat
+                        detail</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 @endsection

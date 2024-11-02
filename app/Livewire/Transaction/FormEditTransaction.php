@@ -3,6 +3,8 @@
 namespace App\Livewire\Transaction;
 
 use App\Domains\TransactionDomain;
+use App\Livewire\Component\AlertSuccess;
+use App\Livewire\Home\TransactionInDay;
 use App\Services\CategoryService;
 use App\Services\PeriodService;
 use App\Services\TransactionService;
@@ -20,6 +22,8 @@ class FormEditTransaction extends Component
     public $category;
     public $total;
     public $description;
+
+    public $isHidden = true;
 
     public $listCategory;
     public $listSelectCategory;
@@ -40,18 +44,23 @@ class FormEditTransaction extends Component
 
         $this->listCategory = $this->categoryService->getAll(auth()->user());
 
-        $this->getTransaction = $this->transactionService->getByCode(auth()->user(), $this->code);
+        if (is_string($this->code)) {
+            $this->getTransaction = $this->transactionService->getByCode(auth()->user(), $this->code);
+        }
     }
 
     public function mount()
     {
-        $this->date = date('Y-m-d', $this->getTransaction->date);
-        $this->type = $this->getTransaction->income == 0 ? 'spending' : 'income';
-        $this->total = $this->type == 'income' ? $this->getTransaction->income : $this->getTransaction->spending;
-        $this->description = $this->getTransaction->description;
-        $this->category = $this->getTransaction->category_id;
+        if (is_string($this->code)) {
 
-        $this->showTotal = $this->total;
+            $this->date = date('Y-m-d', $this->getTransaction->date);
+            $this->type = $this->getTransaction->income == 0 ? 'spending' : 'income';
+            $this->total = $this->type == 'income' ? $this->getTransaction->income : $this->getTransaction->spending;
+            $this->description = $this->getTransaction->description;
+            $this->category = $this->getTransaction->category_id;
+
+            $this->showTotal = $this->total;
+        }
 
         $this->listSelectCategory = $this->listCategory->where('type', $this->type);
     }
@@ -67,9 +76,21 @@ class FormEditTransaction extends Component
         ];
     }
 
+    public function getListeners()
+    {
+        return [
+            'open-box' => 'doShowBox'
+        ];
+    }
+
     public function setTotal()
     {
         $this->showTotal = is_numeric($this->total) ? $this->total : 0;
+    }
+
+    public function doSetType(string $type)
+    {
+        $this->type = $type;
     }
 
     public function doEdit()
@@ -104,7 +125,9 @@ class FormEditTransaction extends Component
             Log::info("do edit transaction success");
             DB::commit();
 
-            return redirect('/')->with('alert-success', "Transaksi berhasil di edit.");
+            $this->isHidden = true;
+            $this->dispatch('alert-show', "Transaksi berhasil di edit.")->to(AlertSuccess::class);
+            $this->dispatch('edit-transaction')->to(TransactionInDay::class);
         } catch (\Throwable $th) {
             DB::rollBack();
 
@@ -112,6 +135,32 @@ class FormEditTransaction extends Component
                 'message' => $th->getMessage(),
             ]);
         }
+    }
+
+    public function doShowBox($code)
+    {
+        $this->code = $code;
+        $this->listCategory = $this->categoryService->getAll(auth()->user());
+
+        $getTransaction = $this->transactionService->getByCode(auth()->user(), $this->code);
+
+        $this->date = date('Y-m-d', $getTransaction->date);
+        $this->type = $getTransaction->income == 0 ? 'spending' : 'income';
+        $this->total = $this->type == 'income' ? $getTransaction->income : $getTransaction->spending;
+        $this->description = $getTransaction->description;
+
+        $this->listSelectCategory = $this->listCategory->where('type', $this->type);
+
+        $this->category = $getTransaction->category_id;
+
+        $this->showTotal = $this->total;
+
+        $this->isHidden = false;
+    }
+
+    public function doHideBox()
+    {
+        $this->isHidden = true;
     }
 
     public function render()

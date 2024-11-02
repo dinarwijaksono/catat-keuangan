@@ -2,7 +2,7 @@
     'fixed top-0 right-0 left-0 bottom-0 bg-gray-300/75 z-50',
     'hidden' => $isHidden,
 ])>
-    <div class="flex justify-center mt-[100px]">
+    <div class="flex justify-center mt-[70px]">
         <div class="p-4 bg-white rounded-lg w-5/12 shadow-lg">
             <h1 class="font-semibold text-center mb-3">Buat Kategori</h1>
 
