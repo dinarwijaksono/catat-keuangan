@@ -1,7 +1,7 @@
 <section class="mb-4 shadow-lg shadow-slate-300 hover:shadow-slate-500 border-l-4 border-blue-400 rounded-lg">
 
     <div class="head p-3 underline">
-        12 Januari 2024
+        {{ date('j F Y') }}
     </div>
 
     <div>
