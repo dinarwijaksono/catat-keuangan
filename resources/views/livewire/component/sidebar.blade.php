@@ -7,22 +7,22 @@
                 <li>
                     <a href="/" @class([
                         'block py-3 px-8 rounded-y rounded-r-full',
-                        'bg-orange-200' => request()->path() == '/',
-                        'hover:bg-gray-300' => request()->path() != '/',
+                        'bg-orange-200' => $path == '',
+                        'hover:bg-gray-300' => $path != '',
                     ])>Beranda</a>
                 </li>
 
                 <li><a href="/category" @class([
                     'block py-3 px-8 rounded-y rounded-r-full',
-                    'bg-orange-200' => request()->path() == 'category',
-                    'hover:bg-gray-300' => request()->path() != 'category',
+                    'bg-orange-200' => $path == 'category',
+                    'hover:bg-gray-300' => $path != 'category',
                 ])>Kategori</a>
                 </li>
 
                 <li><a href="/report" @class([
                     'block py-3 px-8 rounded-y rounded-r-full',
-                    'bg-orange-200' => request()->path() == 'report',
-                    'hover:bg-gray-300' => request()->path() != 'report',
+                    'bg-orange-200' => $path == 'report',
+                    'hover:bg-gray-300' => $path != 'report',
                 ])>Laporan</a>
                 </li>
 

@@ -30,7 +30,8 @@
 
                     <tr class="hover:bg-gray-100">
                         <td class="py-3 px-4 border-b border-gray-200 text-center">
-                            <a href="/" class="text-blue-500 hover:underline">{{ $key->category_name }}</a>
+                            <a href="/category/detail/{{ $key->category_code }}"
+                                class="text-blue-500 hover:underline">{{ $key->category_name }}</a>
                         </td>
                         <td class="py-3 px-4 border-b border-gray-200">{{ $key->description }}</td>
                         <td class="py-3 px-4 border-b border-gray-200 text-right text-green-500">

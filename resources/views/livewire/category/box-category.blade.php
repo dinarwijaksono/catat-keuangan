@@ -20,7 +20,8 @@
                 @foreach ($categories as $key)
                     <tr class="hover:bg-gray-100">
                         <td class="py-3 px-4 border-b border-gray-200 ">
-                            <a href="#" class="text-blue-500 hover:underline">{{ $key->name }}</a>
+                            <a href="/category/detail/{{ $key->code }}"
+                                class="text-blue-500 hover:underline">{{ $key->name }}</a>
                         </td>
                         <td class="py-3 px-4 border-b text-center border-gray-200">
                             <span

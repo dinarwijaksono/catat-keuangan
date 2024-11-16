@@ -17,7 +17,7 @@
 
     <div class="flex mt-24">
 
-        @livewire('component.sidebar')
+        @livewire('component.sidebar', ['fullPath' => request()->path()])
 
         <main class="basis-9/12 p-6">
             <div class="max-w-3xl mx-auto">
