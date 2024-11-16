@@ -35,13 +35,24 @@ class BoxTotalCategoryByPeriod extends Component
         if (is_null($this->listPeriod)) {
             $this->transaction = null;
         } else {
+            $this->periodSelect = $this->listPeriod->first()->id;
+
             $this->transaction = $this->reportService->getTotalCategoryByPeriod(auth()->user(), $this->listPeriod->first()->id);
         }
+    }
+
+    public function getListeners()
+    {
+        return [
+            'do-select-period' => 'render'
+        ];
     }
 
     public function doSelectPeriod()
     {
         $this->transaction = $this->reportService->getTotalCategoryByPeriod(auth()->user(), $this->periodSelect);
+
+        $this->dispatch('do-select-period')->self();
     }
 
     public function render()
