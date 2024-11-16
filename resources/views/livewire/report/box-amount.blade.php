@@ -1,26 +1,32 @@
-<section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
+<section class="mb-4 shadow-lg shadow-slate-300 border-l-4 border-blue-400 rounded-lg">
 
-    <table class="table w-full" aria-describedby="my-table">
-        <tr class="bg-yellow-300">
-            <th class="p-1">Deskripsi</th>
-            <th class="p-1">Nilai</th>
+    <table class="min-w-full bg-white">
+        <tr class="bg-gray-100 text-gray-600 uppercase text-sm">
+            <th class="py-3 px-4 border-b border-gray-200 text-center">Deskripsi</th>
+            <th class="py-3 px-4 border-b border-gray-200 text-center">Nilai</th>
         </tr>
 
         <tr>
-            <td class="p-1">Pemasukan</td>
-            <td class="text-right text-green-600 p-1">
+            <td class="py-3 px-4 border-b border-gray-200">Total Pemasukan</td>
+            <td class="py-3 px-4 border-b border-gray-200 text-right font-bold text-green-500">
                 {{ $this->amount->total_income == null ? 0 : number_format($this->amount->total_income, 0) }}</td>
         </tr>
 
         <tr>
-            <td class="p-1">Pengeluaran</td>
-            <td class="text-right text-red-600 p-1">
+            <td class="py-3 px-4 border-b border-gray-200">Total Pengeluaran</td>
+            <td class="py-3 px-4 border-b border-gray-200 text-right text-red-500 font-bold">
                 {{ $this->amount->total_spending == null ? 0 : number_format($this->amount->total_spending, 0) }}</td>
         </tr>
 
         <tr class="bg-yellow-100">
-            <td class="p-1">Selisih</td>
-            <td class="text-right font-bold p-1">
+            <td class="py-3 px-4 border-b border-gray-200">Selisih</td>
+            <td @class([
+                'py-3 px-4 border-b border-gray-200 text-right font-bold',
+                'text-red-500' =>
+                    $this->amount->total_income < $this->amount->total_spending,
+                'text-green-500' =>
+                    $this->amount->total_income > $this->amount->total_spending,
+            ])>
                 {{ number_format($this->amount->total_income - $this->amount->total_spending, 0) }}
             </td>
         </tr>
