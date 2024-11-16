@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Livewire\Home;
+namespace Tests\Feature\Livewire\Transaction;
 
 use App\Livewire\Component\AlertSuccess;
 use App\Livewire\Home\TransactionInToday;
@@ -14,7 +14,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class TransactionInDayTest extends TestCase
+class BoxTransactionInDayTest extends TestCase
 {
     public $user;
     public $transactionFirst;

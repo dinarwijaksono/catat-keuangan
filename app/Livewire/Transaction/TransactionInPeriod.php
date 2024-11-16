@@ -19,6 +19,13 @@ class TransactionInPeriod extends Component
         $this->transactionRecent = $this->transactionService->getRecent(auth()->user());
     }
 
+    public function getListeners()
+    {
+        return [
+            'do-render' => 'render'
+        ];
+    }
+
     public function render()
     {
         return view('livewire.transaction.transaction-in-period');

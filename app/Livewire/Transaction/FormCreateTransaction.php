@@ -4,7 +4,6 @@ namespace App\Livewire\Transaction;
 
 use App\Domains\TransactionDomain;
 use App\Livewire\Component\AlertSuccess;
-use App\Livewire\Home\TransactionInDay;
 use App\Services\CategoryService;
 use App\Services\PeriodService;
 use App\Services\TransactionService;
@@ -147,7 +146,8 @@ class FormCreateTransaction extends Component
             DB::commit();
 
             $this->dispatch('alert-show', "Transaksi berhasil di buat.")->to(AlertSuccess::class);
-            $this->dispatch('create-transaction')->to(TransactionInDay::class);
+            $this->dispatch('create-transaction')->to(BoxTransactionInToday::class);
+            $this->dispatch('do-render')->to(TransactionInPeriod::class);
 
             $this->isHidden = true;
         } catch (\Throwable $th) {

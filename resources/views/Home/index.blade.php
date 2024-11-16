@@ -9,10 +9,13 @@
 
         @livewire('transaction.form-create-transaction', ['date' => microtime(true)])
 
-        @livewire('home.transaction-in-day')
+        @if (isset($_GET['date']) && is_numeric($_GET['date']))
+            @livewire('transaction.box-transaction-in-day', ['date' => $_GET['date']])
+        @endif
+
+        @livewire('transaction.box-transaction-in-today')
 
         @livewire('transaction.transaction-in-period')
-
 
     </div>
 @endsection
