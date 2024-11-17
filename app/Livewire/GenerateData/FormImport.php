@@ -113,7 +113,7 @@ class FormImport extends Component
 
             Session::flash('alert-success', "Transaksi berhasil di generate.");
 
-            return redirect('/generate-data');
+            return redirect('/generate');
         } catch (\Throwable $th) {
             DB::rollBack();
 

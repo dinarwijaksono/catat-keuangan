@@ -26,7 +26,7 @@ Route::get('/create-transaction/{date}', [TransactionController::class, 'create'
 Route::get('/edit-transaction/{code}', [TransactionController::class, 'edit'])->middleware('auth');
 
 // GenerateDataController
-Route::get('/generate-data', [GenerateDataController::class, 'index'])->middleware('auth');
+Route::get('/generate', [GenerateDataController::class, 'index'])->middleware('auth');
 
 // ReportController
 Route::get('/report', [ReportController::class, 'index'])->middleware('auth');

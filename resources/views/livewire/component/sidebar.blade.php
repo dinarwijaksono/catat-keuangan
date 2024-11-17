@@ -19,6 +19,13 @@
                 ])>Kategori</a>
                 </li>
 
+                <li><a href="/generate" @class([
+                    'block py-3 px-8 rounded-y rounded-r-full',
+                    'bg-orange-200' => $path == 'generate',
+                    'hover:bg-gray-300' => $path != 'generate',
+                ])>Generate data</a>
+                </li>
+
                 <li><a href="/report" @class([
                     'block py-3 px-8 rounded-y rounded-r-full',
                     'bg-orange-200' => $path == 'report',

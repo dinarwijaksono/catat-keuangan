@@ -1,4 +1,5 @@
-<section class="bg-white rounded-sm shadow p-4 mx-4 mb-4">
+<section class="mb-4 shadow-lg shadow-slate-300 hover:shadow-slate-500 border-l-4 border-blue-400 rounded-lg p-4">
+
     <div class="mb-4">
         <h3 class="title">Import dari file CSV</h3>
     </div>
