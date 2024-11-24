@@ -135,6 +135,24 @@ class TransactionServiceTest extends TestCase
         $this->assertObjectHasProperty('period_name', $response);
     }
 
+    public function test_get_by_period()
+    {
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+
+        $transaction = Transaction::select('*')->first();
+        $response = $this->transactionService->getByPeriod($this->user->id, $transaction->period_id);
+
+        $tran = $response->first();
+        $this->assertObjectHasProperty('code', $tran);
+        $this->assertObjectHasProperty('period_date', $tran);
+        $this->assertObjectHasProperty('period_name', $tran);
+        $this->assertObjectHasProperty('category_code', $tran);
+        $this->assertObjectHasProperty('category_name', $tran);
+    }
+
     public function test_update()
     {
         $this->seed(TransactionSeeder::class);

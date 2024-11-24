@@ -199,6 +199,36 @@ class TransactionService
         }
     }
 
+    public function getByPeriod(int $userId, int $periodId): Collection
+    {
+        $transaction = DB::table('transactions')
+            ->join('periods', 'periods.id', '=', 'transactions.period_id')
+            ->join('categories', 'categories.id', '=', 'transactions.category_id')
+            ->select(
+                'transactions.code',
+                'periods.period_date',
+                'periods.period_name',
+                'categories.code as category_code',
+                'categories.name as category_name',
+                'transactions.date',
+                'transactions.description',
+                'transactions.income',
+                'transactions.spending',
+                'transactions.created_at',
+                'transactions.updated_at'
+            )
+            ->where('transactions.user_id', $userId)
+            ->where('transactions.period_id', $periodId)
+            ->orderByDesc('transactions.date')
+            ->get();
+
+        Log::info('get transaction by period success', [
+            'user_id' => $userId
+        ]);
+
+        return $transaction;
+    }
+
     // update
     public function update(User $user, TransactionDomain $transactionDomain): void
     {
