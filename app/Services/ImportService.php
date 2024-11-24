@@ -14,7 +14,7 @@ class ImportService
             $file = Storage::disk('local');
             $file->makeDirectory('Format');
 
-            $content = "No;Tanggal;Bulan;Tahun;Kategori;Deskirpsi;Type (income/spending);value;";
+            $content = "No,Tanggal,Bulan,Tahun,Kategori,Deskirpsi,Type (income/spending),value,";
 
             $file->put('Format/format-import-data.csv', $content);
 

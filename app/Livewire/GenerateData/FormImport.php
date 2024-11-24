@@ -73,7 +73,7 @@ class FormImport extends Component
             for ($i = 1; $i < count($data); $i++) {
 
                 if (trim($data[$i]) !== "") {
-                    $k = explode(";", $data[$i]);
+                    $k = explode(",", $data[$i]);
                     $detail[] = $k;
                 }
             }
