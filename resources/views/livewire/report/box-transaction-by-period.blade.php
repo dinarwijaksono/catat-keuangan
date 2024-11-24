@@ -41,11 +41,12 @@
         <table class="min-w-full bg-white">
             <thead>
                 <tr class="bg-green-500 text-white uppercase">
-                    <th class="py-1 px-2">Tanggal</td>
-                    <th class="py-1 px-2">Kategori</td>
-                    <th class="py-1 px-2">Deskripsi</td>
-                    <th class="py-1 px-2">Pemasukan</td>
-                    <th class="py-1 px-2">Pengeluaran</td>
+                    <th class="py-1 px-2">Tanggal</th>
+                    <th class="py-1 px-2">Kategori</th>
+                    <th class="py-1 px-2">Deskripsi</th>
+                    <th class="py-1 px-2">Pemasukan</th>
+                    <th class="py-1 px-2">Pengeluaran</th>
+                    <th></th>
                 </tr>
             </thead>
 
@@ -63,6 +64,19 @@
                             {{ number_format($transaction->income) }}</td>
                         <td class="py-3 px-4 border-b border-gray-200 text-right text-red-500">
                             {{ number_format($transaction->spending) }}</td>
+                        <td>
+                            <div class="flex gap-1 p-1">
+                                <div class="basis-6/12">
+                                    <button type="button" wire:click="doEdit('{{ $transaction->code }}')"
+                                        class="py-1 px-2 w-full bg-green-500 hover:bg-green-400 rounded text-white text-[12px]">Edit</button>
+                                </div>
+
+                                <div class="basis-6/12">
+                                    <button type="button" wire:click="doDeleteTransaction('{{ $transaction->code }}')"
+                                        class="py-1 px-2 w-full bg-red-500 hover:bg-red-400 rounded text-white text-[12px]">Hapus</button>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

@@ -4,6 +4,7 @@ namespace App\Livewire\Transaction;
 
 use App\Domains\TransactionDomain;
 use App\Livewire\Component\AlertSuccess;
+use App\Livewire\Report\BoxTransactionByPeriod;
 use App\Services\CategoryService;
 use App\Services\PeriodService;
 use App\Services\TransactionService;
@@ -128,6 +129,8 @@ class FormEditTransaction extends Component
             $this->dispatch('alert-show', "Transaksi berhasil di edit.")->to(AlertSuccess::class);
             $this->dispatch('edit-transaction')->to(BoxTransactionInToday::class);
             $this->dispatch('do-render')->to(TransactionInPeriod::class);
+
+            $this->dispatch('do-render')->to(BoxTransactionByPeriod::class);
         } catch (\Throwable $th) {
             DB::rollBack();
 

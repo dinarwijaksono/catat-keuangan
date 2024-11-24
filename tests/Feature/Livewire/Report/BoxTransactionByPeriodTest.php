@@ -3,7 +3,10 @@
 namespace Tests\Feature\Livewire\Report;
 
 use App\Livewire\Report\BoxTransactionByPeriod;
+use App\Models\Transaction;
 use App\Models\User;
+use Database\Seeders\CategorySeeder;
+use Database\Seeders\TransactionSeeder;
 use Database\Seeders\UserRegisterSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -27,5 +30,22 @@ class BoxTransactionByPeriodTest extends TestCase
     {
         Livewire::test(BoxTransactionByPeriod::class)
             ->assertStatus(200);
+    }
+
+    public function test_delete_transaction()
+    {
+        $this->seed(CategorySeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+        $this->seed(TransactionSeeder::class);
+
+        $transaction = Transaction::first();
+
+        Livewire::test(BoxTransactionByPeriod::class)
+            ->call('doDeleteTransaction', $transaction->code);
+
+        $this->assertDatabaseMissing('transactions', [
+            'code' => $transaction->code
+        ]);
     }
 }
