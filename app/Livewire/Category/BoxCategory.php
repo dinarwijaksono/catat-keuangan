@@ -31,7 +31,7 @@ class BoxCategory extends Component
 
         $this->categoryService = App::make(CategoryService::class);
 
-        $this->categories = $this->categoryService->getAll($this->user)
+        $this->categories = $this->categoryService->getAll($this->user->id)
             ->sortBy('name');
     }
 
@@ -43,7 +43,7 @@ class BoxCategory extends Component
         ];
     }
 
-        public function doDelete(string $code)
+    public function doDelete(string $code)
     {
         try {
             $result = $this->categoryService->delete(auth()->user(), $code);
@@ -64,7 +64,8 @@ class BoxCategory extends Component
         }
     }
 
-    public function doOpenFormCreateCategory(){
+    public function doOpenFormCreateCategory()
+    {
         $this->dispatch('open-box')->to(FormCreateCategory::class);
     }
 

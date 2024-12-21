@@ -21,9 +21,9 @@ class GenerateDataControllerTest extends TestCase
         $this->actingAs($this->user);
     }
 
-    public function test_example(): void
+    public function test_index(): void
     {
-        $response = $this->get('/');
+        $response = $this->get('/generate');
 
         $response->assertStatus(200);
     }

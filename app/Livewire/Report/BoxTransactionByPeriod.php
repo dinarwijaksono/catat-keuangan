@@ -34,7 +34,7 @@ class BoxTransactionByPeriod extends Component
         $this->transactionService = App::make(TransactionService::class);
 
         $this->listPeriod = $this->periodService->getAll(auth()->user());
-        $this->listCategory = $this->categoryService->getAll(auth()->user());
+        $this->listCategory = $this->categoryService->getAll(auth()->user()->id);
     }
 
     public function mount()

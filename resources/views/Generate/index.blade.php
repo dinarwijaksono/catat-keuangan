@@ -8,7 +8,7 @@
             'message' => session()->get('alert-success'),
         ])
 
-        @livewire('generate-data.form-import')
+        {{-- @livewire('generate-data.form-import') --}}
 
     </section>
 @endsection

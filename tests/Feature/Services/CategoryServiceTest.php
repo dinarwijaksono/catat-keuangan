@@ -113,7 +113,7 @@ class CategoryServiceTest extends TestCase
         $this->seed(CategorySeeder::class);
         $this->seed(CategorySeeder::class);
 
-        $response = $this->categoryService->getAll($this->user);
+        $response = $this->categoryService->getAll($this->user->id);
 
         $this->assertIsObject($response);
         $this->assertEquals($response->count(), 3);

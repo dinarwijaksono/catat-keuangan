@@ -43,7 +43,7 @@ class FormCreateTransaction extends Component
         $this->periodService = App::make(PeriodService::class);
         $this->transactionService = App::make(TransactionService::class);
 
-        $this->listCategory = $this->categoryService->getAll(auth()->user());
+        $this->listCategory = $this->categoryService->getAll(auth()->user()->id);
     }
 
     public function mount()

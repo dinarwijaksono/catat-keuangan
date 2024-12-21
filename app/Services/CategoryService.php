@@ -125,21 +125,40 @@ class CategoryService
         }
     }
 
-    public function getAll(User $user): Collection
+    public function getAll(int $userId): Collection
     {
-        self::boot($user);
-
         try {
 
-            $category = Category::select('id', 'user_id', 'code', 'name', 'type', 'created_at', 'updated_at')
-                ->where('user_id', $user->id)
+            $startTime = microtime(true) * 1000;
+
+            $category = Category::select(
+                'id',
+                'user_id',
+                'code',
+                'name',
+                'type',
+                'created_at',
+                'updated_at'
+            )
+                ->where('user_id', $userId)
                 ->get();
 
-            Log::info('get all category success');
+            $endTime = microtime(true) * 1000;
+
+            if (($endTime - $startTime) >= env('OVERTIME')) {
+                Log::error('get all category overtime', [
+                    'user_id' => $userId
+                ]);
+            }
+
+            Log::info('get all category success', [
+                'user_id' => $userId
+            ]);
 
             return $category;
         } catch (\Throwable $th) {
             Log::error('get all category failed', [
+                'user_id' => $userId,
                 'message' => $th->getMessage()
             ]);
 

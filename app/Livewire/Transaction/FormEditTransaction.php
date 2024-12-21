@@ -42,7 +42,7 @@ class FormEditTransaction extends Component
         $this->categoryService = App::make(CategoryService::class);
         $this->transactionService = App::make(TransactionService::class);
 
-        $this->listCategory = $this->categoryService->getAll(auth()->user());
+        $this->listCategory = $this->categoryService->getAll(auth()->user()->id);
 
         if (is_string($this->code)) {
             $this->getTransaction = $this->transactionService->getByCode(auth()->user(), $this->code);
@@ -143,7 +143,7 @@ class FormEditTransaction extends Component
     public function doShowBox($code)
     {
         $this->code = $code;
-        $this->listCategory = $this->categoryService->getAll(auth()->user());
+        $this->listCategory = $this->categoryService->getAll(auth()->user()->id);
 
         $getTransaction = $this->transactionService->getByCode(auth()->user(), $this->code);
 
