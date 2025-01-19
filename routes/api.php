@@ -14,3 +14,4 @@ Route::delete('/logout', [AuthController::class, 'logout'])->middleware(CheckTok
 
 // CategoryController
 Route::post('/create-category', [CategoryController::class, 'create'])->middleware(CheckTokenMiddeware::class);
+Route::get('/category/get-all', [CategoryController::class, 'getAll'])->middleware(CheckTokenMiddeware::class);

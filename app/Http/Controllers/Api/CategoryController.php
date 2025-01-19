@@ -61,4 +61,19 @@ class CategoryController extends Controller
             'message' => "Create category success",
         ], 201);
     }
+
+    public function getAll(Request $request)
+    {
+        $token = ApiToken::where('token', $request->header('api-token'))->first();
+
+        $categories = $this->categoryService->getAll($token->user_id);
+
+        Log::info('GET /api/category/get-all success', [
+            'user_id' => $token->user_id
+        ]);
+
+        return response()->json([
+            'data' => $categories->toArray()
+        ], 200);
+    }
 }

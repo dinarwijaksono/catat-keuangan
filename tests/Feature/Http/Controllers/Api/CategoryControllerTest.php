@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\ApiToken;
+use Database\Seeders\CategorySeeder;
 use Database\Seeders\CreateUserWithTokenSeeder;
 use Database\Seeders\UserRegisterSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -49,5 +50,27 @@ class CategoryControllerTest extends TestCase
         $response->assertStatus(422);
         $response->assertJsonPath('message', 'Validasi error.');
         $response->assertJsonPath('errors.type', 'Format type salah.');
+    }
+
+    public function test_get_all_success()
+    {
+        $response = $this->withHeader('api-token', $this->token->token)
+            ->get('/api/category/get-all');
+
+        $response->assertStatus(200);
+        $this->assertEquals(0, count($response['data']));
+    }
+
+    public function get_get_all_not_empty()
+    {
+        $this->seed(CategorySeeder::class);
+        $this->seed(CategorySeeder::class);
+
+        $response = $this->withHeader('api-token', $this->token->token)
+            ->get('/api/category/get-all');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['data' => ['id', 'name', 'code']]);
+        $this->assertEquals(2, count($response['data']));
     }
 }
