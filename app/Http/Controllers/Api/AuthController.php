@@ -50,7 +50,7 @@ class AuthController extends Controller
         if (is_null($register)) {
             return response()->json([
                 'errors' => [
-                    "message" => "Email has already exist."
+                    "general" => "Email has already exist."
                 ]
             ], 400);
         }

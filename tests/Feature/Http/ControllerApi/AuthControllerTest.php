@@ -53,9 +53,9 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(400);
 
         $response->assertJsonStructure([
-            'errors' => ['message']
+            'errors' => ['general']
         ]);
-        $response->assertJsonPath('errors.message', "Email has already exist.");
+        $response->assertJsonPath('errors.general', "Email has already exist.");
     }
 
     public function test_login_success()
