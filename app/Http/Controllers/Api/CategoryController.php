@@ -77,8 +77,24 @@ class CategoryController extends Controller
         ], 200);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request, string $code)
     {
         $token = ApiToken::where('token', $request->header('api-token'))->first();
+
+        $result = $this->categoryService->delete($token->user_id, $code);
+
+        if (!$result['status']) {
+            Log::error('/DELETE /delete-category/code failed');
+
+            return response()->json([
+                'message' => $result['message']
+            ], 400);
+        }
+
+        Log::info('/DELETE /delete-category/code success');
+
+        return response()->json([
+            'message' => "Kategori berhasil di hapus."
+        ]);
     }
 }

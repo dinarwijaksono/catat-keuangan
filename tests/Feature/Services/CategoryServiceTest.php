@@ -152,7 +152,8 @@ class CategoryServiceTest extends TestCase
 
         $response = $this->categoryService->delete($this->user->id, $category->code);
 
-        $this->assertFalse(($response));
+        $this->assertFalse(($response['status']));
+        $this->assertEquals($response['message'], "Kategorin digunakan pada transaksi.");
         $this->assertDatabaseHas('categories', [
             'code' => $category->code
         ]);
@@ -167,7 +168,7 @@ class CategoryServiceTest extends TestCase
 
         $response = $this->categoryService->delete($this->user->id, $category->code);
 
-        $this->assertTrue($response);
+        $this->assertTrue($response['status']);
         $this->assertDatabaseMissing('categories', [
             'code' => $category->code
         ]);

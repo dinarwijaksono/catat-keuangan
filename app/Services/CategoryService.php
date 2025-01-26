@@ -188,7 +188,7 @@ class CategoryService
 
 
     // delete
-    public function delete(int $userId, string $categoryCode): bool
+    public function delete(int $userId, string $categoryCode): object
     {
         try {
 
@@ -196,6 +196,10 @@ class CategoryService
                 ->where('user_id', $userId)
                 ->where('code', $categoryCode)
                 ->first();
+
+            if ($category == null) {
+                return collect(['status' => true]);
+            }
 
             $transaction = Transaction::select('id', 'category_id')
                 ->where('user_id', $userId)
@@ -207,7 +211,11 @@ class CategoryService
                     'user_id' => $userId,
                     'message' => 'category is used'
                 ]);
-                return false;
+
+                return collect([
+                    'status' => false,
+                    'message' => "Kategorin digunakan pada transaksi."
+                ]);
             }
 
             Category::where('user_id', $userId)
@@ -217,14 +225,18 @@ class CategoryService
             Log::info('delete category success', [
                 'user_id' => $userId,
             ]);
-            return true;
+
+            return collect(['status' => true]);
         } catch (\Throwable $th) {
             Log::alert('delete category failed', [
                 'user_id' => $userId,
                 'message' => $th->getMessage()
             ]);
 
-            return false;
+            return collect([
+                'status' => false,
+                'message' => "Gagal menghapus kategori."
+            ]);
         }
     }
 }
