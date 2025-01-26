@@ -70,7 +70,7 @@ class AuthControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            'data' => ['email', 'api-token', 'token-expired']
+            'data' => ['email', 'email', 'api-token', 'token-expired']
         ]);
         $response->assertJsonPath('data.email', $user->email);
     }
@@ -84,9 +84,9 @@ class AuthControllerTest extends TestCase
 
         $response->assertStatus(400);
         $response->assertJsonStructure([
-            'errors' => ['message']
+            'errors' => ['general']
         ]);
-        $response->assertJsonPath('errors.message', 'Email or password is wrong.');
+        $response->assertJsonPath('errors.general', 'Email or password is wrong.');
     }
 
     public function test_login_failed_pasword_is_wrong()
@@ -101,9 +101,9 @@ class AuthControllerTest extends TestCase
 
         $response->assertStatus(400);
         $response->assertJsonStructure([
-            'errors' => ['message']
+            'errors' => ['general']
         ]);
-        $response->assertJsonPath('errors.message', 'Email or password is wrong.');
+        $response->assertJsonPath('errors.general', 'Email or password is wrong.');
     }
 
     public function test_get_current_user_success()

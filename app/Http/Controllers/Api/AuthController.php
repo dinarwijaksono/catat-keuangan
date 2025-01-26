@@ -82,7 +82,7 @@ class AuthController extends Controller
         if (is_null($response)) {
             return response()->json([
                 'errors' => [
-                    'message' => 'Email or password is wrong.'
+                    'general' => 'Email or password is wrong.'
                 ]
             ], 400);
         }
@@ -91,6 +91,7 @@ class AuthController extends Controller
             'data' => [
                 'api-token' => $response->api_token,
                 'token-expired' => $response->token_expired,
+                'name' => $response->name,
                 'email' => $response->email,
             ]
         ], 200);
