@@ -150,7 +150,7 @@ class CategoryServiceTest extends TestCase
             ->where('id', $transaction->category_id)
             ->first();
 
-        $response = $this->categoryService->delete($this->user, $category->code);
+        $response = $this->categoryService->delete($this->user->id, $category->code);
 
         $this->assertFalse(($response));
         $this->assertDatabaseHas('categories', [
@@ -165,7 +165,7 @@ class CategoryServiceTest extends TestCase
 
         $category = Category::select('*')->first();
 
-        $response = $this->categoryService->delete($this->user, $category->code);
+        $response = $this->categoryService->delete($this->user->id, $category->code);
 
         $this->assertTrue($response);
         $this->assertDatabaseMissing('categories', [

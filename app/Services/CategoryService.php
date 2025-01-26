@@ -188,42 +188,39 @@ class CategoryService
 
 
     // delete
-    public function delete(User $user, string $categoryCode): bool
+    public function delete(int $userId, string $categoryCode): bool
     {
         try {
 
             $category = Category::select('id')
-                ->where('user_id', $user->id)
+                ->where('user_id', $userId)
                 ->where('code', $categoryCode)
                 ->first();
 
             $transaction = Transaction::select('id', 'category_id')
-                ->where('user_id', $user->id)
+                ->where('user_id', $userId)
                 ->where('category_id', $category->id)
                 ->get();
 
             if ($transaction->count() > 0) {
                 Log::error('delete category failed', [
-                    'user_id' => $user->id,
-                    'user_name' => $user->name,
+                    'user_id' => $userId,
                     'message' => 'category is used'
                 ]);
                 return false;
             }
 
-            Category::where('user_id', $user->id)
+            Category::where('user_id', $userId)
                 ->where('code', $categoryCode)
                 ->delete();
 
             Log::info('delete category success', [
-                'user_id' => $user->id,
-                'user_name' => $user->name,
+                'user_id' => $userId,
             ]);
             return true;
         } catch (\Throwable $th) {
             Log::alert('delete category failed', [
-                'user_id' => $user->id,
-                'user_name' => $user->name,
+                'user_id' => $userId,
                 'message' => $th->getMessage()
             ]);
 

@@ -76,4 +76,9 @@ class CategoryController extends Controller
             'data' => $categories->toArray()
         ], 200);
     }
+
+    public function delete(Request $request)
+    {
+        $token = ApiToken::where('token', $request->header('api-token'))->first();
+    }
 }

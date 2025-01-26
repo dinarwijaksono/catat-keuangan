@@ -46,7 +46,7 @@ class BoxCategory extends Component
     public function doDelete(string $code)
     {
         try {
-            $result = $this->categoryService->delete(auth()->user(), $code);
+            $result = $this->categoryService->delete(auth()->user()->id, $code);
 
             if ($result) {
                 $this->dispatch('alert-show', "Kategori berhasil di hapus.")->to(AlertSuccess::class);
