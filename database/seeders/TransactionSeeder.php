@@ -37,6 +37,6 @@ class TransactionSeeder extends Seeder
         $transaction->income = $category->type == 'income' ? random_int(1000, 10000) : 0;
         $transaction->spending = $category->type == 'spending' ? random_int(1000, 10000) : 0;
 
-        $transactionService->create($user, $transaction);
+        $transactionService->create($transaction);
     }
 }

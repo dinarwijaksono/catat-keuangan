@@ -20,10 +20,8 @@ class TransactionService
     }
 
     // create
-    public function create(User $user, TransactionDomain $transactionDomain): void
+    public function create(TransactionDomain $transactionDomain): void
     {
-        self::boot($user);
-
         try {
 
             $day = date('j', $transactionDomain->date);
@@ -42,10 +40,9 @@ class TransactionService
                 'created_at' => round(microtime(true) * 1000),
                 'updated_at' => round(microtime(true) * 1000),
             ]);
-
-            Log::info('create transaction success');
         } catch (\Throwable $th) {
             Log::error('create transaction failed', [
+                'user_id' => $transactionDomain->userId,
                 'message' => $th->getMessage()
             ]);
         }

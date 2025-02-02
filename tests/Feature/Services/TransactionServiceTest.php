@@ -51,7 +51,7 @@ class TransactionServiceTest extends TestCase
         $transactionDomain->income = 0;
         $transactionDomain->spending = 20000;
 
-        $this->transactionService->create($this->user, $transactionDomain);
+        $this->transactionService->create($transactionDomain);
 
         $this->assertDatabaseHas('transactions', [
             'user_id' => $this->user->id,

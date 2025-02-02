@@ -133,7 +133,7 @@ class FormCreateTransaction extends Component
             $transactionDomain->income = $this->type == 'income' ? $this->total : 0;
             $transactionDomain->spending = $this->type == 'spending' ? $this->total : 0;
 
-            $this->transactionService->create($user, $transactionDomain);
+            $this->transactionService->create($transactionDomain);
 
             $this->date = date('Y-m-d');
             $this->type = 'spending';
