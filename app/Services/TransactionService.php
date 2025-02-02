@@ -5,12 +5,20 @@ namespace App\Services;
 use App\Domains\TransactionDomain;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Repository\PeriodRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class TransactionService
 {
+    protected $periodRepository;
+
+    public function __construct(PeriodRepository $periodRepository)
+    {
+        $this->periodRepository = $periodRepository;
+    }
+
     public function boot($user)
     {
         Log::withContext([
@@ -23,24 +31,27 @@ class TransactionService
     public function create(TransactionDomain $transactionDomain): void
     {
         try {
+            DB::beginTransaction();
 
-            $day = date('j', $transactionDomain->date);
-            $month = date('n', $transactionDomain->date);
-            $year = date('Y', $transactionDomain->date);
+            $period = $this->periodRepository->findOrCreate($transactionDomain->userId, $transactionDomain->date);
 
-            Transaction::insert([
+            Transaction::create([
                 'user_id' => $transactionDomain->userId,
                 'category_id' => $transactionDomain->categoryId,
-                'period_id' => $transactionDomain->periodId,
+                'period_id' => $period->id,
                 'code' => 'T' . random_int(1, 999999999),
-                'date' => mktime(0, 0, 0, $month, $day, $year),
+                'date' => $transactionDomain->date,
                 'description' => strtolower($transactionDomain->description),
                 'income' => $transactionDomain->income,
                 'spending' => $transactionDomain->spending,
                 'created_at' => round(microtime(true) * 1000),
                 'updated_at' => round(microtime(true) * 1000),
             ]);
+
+            DB::commit();
         } catch (\Throwable $th) {
+            DB::rollBack();
+
             Log::error('create transaction failed', [
                 'user_id' => $transactionDomain->userId,
                 'message' => $th->getMessage()

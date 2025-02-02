@@ -40,13 +40,10 @@ class TransactionServiceTest extends TestCase
 
     public function test_create(): void
     {
-        $periodId = $this->periodService->createGetId($this->user, 1, 2024);
-
         $transactionDomain = new TransactionDomain();
         $transactionDomain->userId = $this->user->id;
         $transactionDomain->categoryId = $this->category->id;
-        $transactionDomain->periodId = $periodId;
-        $transactionDomain->date = mktime(1, 1, 1, 1, 20, 2024);
+        $transactionDomain->date = strtotime("2024-01-20");
         $transactionDomain->description = 'Makan malam';
         $transactionDomain->income = 0;
         $transactionDomain->spending = 20000;
@@ -56,7 +53,6 @@ class TransactionServiceTest extends TestCase
         $this->assertDatabaseHas('transactions', [
             'user_id' => $this->user->id,
             'category_id' => $this->category->id,
-            'period_id' => $periodId,
             'date' => mktime(0, 0, 0, 1, 20, 2024),
             'description' => 'makan malam',
             'income' => 0,
