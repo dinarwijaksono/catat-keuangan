@@ -21,7 +21,7 @@ class TransactionControllerTest extends TestCase
         $this->actingAs($this->user);
     }
 
-    public function test_example(): void
+    public function test_view(): void
     {
         $response = $this->get('/');
 

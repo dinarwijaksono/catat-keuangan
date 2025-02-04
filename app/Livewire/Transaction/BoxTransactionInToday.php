@@ -25,7 +25,7 @@ class BoxTransactionInToday extends Component
         ]);
 
         $this->transactionService = App::make(TransactionService::class);
-        $this->transaction = $this->transactionService->getByDate(auth()->user(), $this->date);
+        $this->transaction = $this->transactionService->getByDate(auth()->user()->id, $this->date);
     }
 
     public function getListeners()

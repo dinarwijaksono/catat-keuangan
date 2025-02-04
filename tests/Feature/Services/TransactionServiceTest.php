@@ -82,7 +82,7 @@ class TransactionServiceTest extends TestCase
 
         $transaction = Transaction::select('*')->first();
 
-        $response = $this->transactionService->getByDate($this->user, $transaction->date);
+        $response = $this->transactionService->getByDate($this->user->id, $transaction->date);
 
         $response = $response->first();
         $this->assertObjectHasProperty('code', $response);

@@ -22,7 +22,7 @@ class TransactionInToday extends Component
         ]);
 
         $this->transactionService = App::make(TransactionService::class);
-        $this->transactionToday = $this->transactionService->getByDate(auth()->user(), time());
+        $this->transactionToday = $this->transactionService->getByDate(auth()->user()->id, time());
     }
 
     public function getListeners()
